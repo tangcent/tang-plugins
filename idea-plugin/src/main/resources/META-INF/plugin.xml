@@ -1,0 +1,65 @@
+<idea-plugin>
+    <id>cn.tangcent.idea.plugin</id>
+    <name>TmPlugin</name>
+    <version>1.0</version>
+    <vendor email="tangcent@tangcent.cn" url="http://www.itangcent.com">TmNg</vendor>
+
+    <description><![CDATA[
+      Tm-Plugin<br>
+    ]]></description>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="145.0"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin inIndex all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <actions>
+        <group id="TmXMenu" text="Tm" description="Tm XMenu">
+            <add-to-group group-id="MainMenu" anchor="last"/>
+            <action id="TmMenu.Fields"
+                    class="com.itangcent.idea.plugin.actions.FieldsAction"
+                    text="GenerateFields" description="Tm plugin for generate fields"/>
+            <action id="com.itangcent.idea.plugin.actions.FormatAction"
+                    class="com.itangcent.idea.plugin.actions.FormatAction" text="TFormat" description="TFormat"/>
+            <action id="com.itangcent.idea.plugin.actions.FieldsJsonAction"
+                    class="com.itangcent.idea.plugin.actions.FieldsJsonAction" text="ToJson" description="ToJson"/>
+            <action id="com.itangcent.idea.plugin.actions.CopyRightAction"
+                    class="com.itangcent.idea.plugin.actions.CopyRightAction" text="CopyRight" description="CopyRight"/>
+            <action id="com.itangcent.idea.plugin.actions.ProjectAction"
+                    class="com.itangcent.idea.plugin.actions.ProjectAction" text="Project" description="Project"/>
+            <action id="com.itangcent.idea.plugin.actions.SettingAction"
+                    class="com.itangcent.idea.plugin.actions.SettingAction" text="Setting" description="Setting"/>
+            <action id="com.itangcent.idea.plugin.actions.ClipboardAction"
+                    class="com.itangcent.idea.plugin.actions.ClipboardAction" text="Clipboard" description="Clipboard"/>
+        </group>
+
+        <group id="TmGenerateExt" text="_TmGenerateExt" description="Tm XMenu">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <action id="GenerateGroup.GenerateFields"
+                    class="com.itangcent.idea.plugin.actions.FieldsAction"
+                    text="_Generate Fields" description="T_Generate Fields">
+            </action>
+            <action id="com.itangcent.idea.plugin.actions.ModificationTagAction"
+                    class="com.itangcent.idea.plugin.actions.ModificationTagAction" text="ModificationTag"
+                    description="ModificationTag"/>
+            <action id="com.itangcent.idea.plugin.actions.InnerClassAction"
+                    class="com.itangcent.idea.plugin.actions.InnerClassAction" text="InnerClass"
+                    description="InnerClass"/>
+            <action id="com.itangcent.idea.plugin.actions.SaveToClipboardAction"
+                    class="com.itangcent.idea.plugin.actions.SaveToClipboardAction" text="SaveToClipboard"
+                    description="Save to clipboard"/>
+        </group>
+
+        <action id="com.itangcent.idea.plugin.actions.SaveToClipboardAction"
+                class="com.itangcent.idea.plugin.actions.SaveToClipboardAction" text="SaveToClipboard"
+                description="Save to clipboard">
+            <add-to-group group-id="EditMenu" anchor="first"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
+        </action>
+    </actions>
+</idea-plugin>

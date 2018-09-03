@@ -20,7 +20,3 @@ tang-common/build/
 gradle/
 
 idea-plugin/\.DS_Store
-
-\.DS_Store
-
-build/kotlin-build/version\.txt
