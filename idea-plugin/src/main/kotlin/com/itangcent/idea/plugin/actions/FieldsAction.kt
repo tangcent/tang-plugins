@@ -25,7 +25,7 @@ class FieldsAction : InitAnAction("Generate Fields") {
         if (editor != null) {
             val document = editor.document
             val fieldGenerator = FieldGenerator()
-            //region 委托WriteCommandAction执行---------------------------------
+            //region 委托actionContext在UI线程执行---------------------------------
             actionContext.runInUi {
                 try {
                     fieldGenerator.generateFields(editor, document)
@@ -36,7 +36,7 @@ class FieldsAction : InitAnAction("Generate Fields") {
                 ActionUtils.optimize(anActionEvent);
 
             }
-            //endregion 委托WriteCommandAction执行---------------------------------
+            //endregion 委托actionContext在UI线程执行---------------------------------
         } else {
             ActionUtils.format(anActionEvent);
         }

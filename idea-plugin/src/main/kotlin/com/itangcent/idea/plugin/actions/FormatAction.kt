@@ -22,7 +22,7 @@ class FormatAction : InitAnAction() {
             val lineCount = document.lineCount
             val formatterList = ArrayList<Formatter>()
             formatterList.add(RegionFormatter(80))
-            //region 委托WriteCommandAction执行---------------------------------
+            //region 委托actionContext在UI线程执行---------------------------------
             actionContext.runInUi {
                 for (line in 0 until lineCount) {
                     for (formatter in formatterList) {
@@ -32,7 +32,7 @@ class FormatAction : InitAnAction() {
                 ActionUtils.format(anActionEvent)
                 ActionUtils.optimize(anActionEvent)
             }
-            //endregion 委托WriteCommandAction执行---------------------------------
+            //endregion 委托actionContext在UI线程执行---------------------------------
         } else {
             ActionUtils.format(anActionEvent)
         }

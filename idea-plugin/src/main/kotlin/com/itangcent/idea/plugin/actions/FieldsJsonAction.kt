@@ -22,13 +22,13 @@ class FieldsJsonAction : LoggedAnAction("To Json") {
             if (editor != null) {
                 val document = editor.document
                 val fieldJsonGenerator = FieldJsonGenerator()
-                //region 委托WriteCommandAction执行---------------------------------
+                //region 委托actionContext在UI线程执行---------------------------------
                 actionContext.runInUi {
                     val generateFieldJson = fieldJsonGenerator.generateFieldJson(editor, document)
                     logger.info("\n$generateFieldJson\n")
                     success("TOJSON", "")
                 }
-                //endregion 委托WriteCommandAction执行---------------------------------
+                //endregion 委托actionContext在UI线程执行---------------------------------
             } else {
                 ActionUtils.format(anActionEvent)
             }

@@ -358,7 +358,7 @@ class AutoComputer {
 
         @Suppress("UNCHECKED_CAST")
         open fun eval(exp: E) {
-            val evalFun = evalFun(exp)
+            val evalFun: () -> Unit = { pool { evalFun(exp) } }
             core.computer.addPassiveListeners(core.property as ASetter<Any?>, evalFun)
             core.computer.addListeners(evalFun, core.params)
             if (core.linkedParams != null) {
@@ -366,7 +366,13 @@ class AutoComputer {
                     core.computer.addListeners(evalFun, kProperty)
                 }
             }
+        }
 
+        private var pool: (() -> Unit) -> Unit = { it() }
+
+        fun listenOn(pool: (() -> Unit) -> Unit): C {
+            this.pool = pool
+            return this as C
         }
 
         protected abstract fun evalFun(exp: E): () -> Unit
@@ -636,7 +642,7 @@ interface AProperty {
 }
 
 interface HasProperty<T> {
-    fun getProperty(): AProperty;
+    fun getProperty(): AProperty
 }
 
 class BeanProperty : AProperty {
@@ -813,24 +819,25 @@ class JTextComponentWrap : ASetter<String?>, AGetter<String?> {
             val jTextComponentWrap: AGetter<Any?> = this as AGetter<Any?>
             component.document.addDocumentListener(object : DocumentListener {
                 override fun insertUpdate(e: DocumentEvent) {
+
                     if (manual) {
                         return
                     }
+                    cache = null
                     computer.call(jTextComponentWrap)
-                    cache = null;
                 }
 
                 override fun removeUpdate(e: DocumentEvent) {
                     if (manual) {
                         return
                     }
+                    cache = null
                     computer.call(jTextComponentWrap)
-                    cache = null;
                 }
 
                 override fun changedUpdate(e: DocumentEvent) {
+                    cache = null
                     computer.call(jTextComponentWrap)
-                    cache = null;
                 }
             })
             hasListen = true
@@ -903,7 +910,7 @@ class JListComponentIndexWrap : ASetter<Int?>, AGetter<Int?> {
     }
 
 
-    private var hasListen = false;
+    private var hasListen = false
 
     override fun onListen(computer: AutoComputer) {
         listenChange(computer)

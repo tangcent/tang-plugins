@@ -50,10 +50,9 @@ object ThreadLocalContextBeanProxies {
 
 
         override fun invoke(proxy: Any?, method: Method?, args: Array<out Any>?): Any? {
-            if (args == null) {
-                return method!!.invoke(localBean)
-            } else {
-                return method!!.invoke(localBean, *args)
+            return when (args) {
+                null -> method!!.invoke(localBean)
+                else -> method!!.invoke(localBean, *args)
             }
         }
 

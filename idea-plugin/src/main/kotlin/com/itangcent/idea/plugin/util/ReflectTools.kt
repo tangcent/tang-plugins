@@ -1,4 +1,4 @@
-package com.itangcent.idea.plugin.extend.rx
+package com.itangcent.idea.plugin.util
 
 import java.lang.IllegalStateException
 import java.lang.reflect.Modifier

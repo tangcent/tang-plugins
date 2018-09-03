@@ -1,6 +1,5 @@
 package com.itangcent.idea.plugin.util
 
-import com.itangcent.idea.plugin.extend.rx.*
 import kotlin.jvm.internal.CallableReference
 import kotlin.reflect.KFunction
 import kotlin.reflect.KProperty

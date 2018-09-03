@@ -10,7 +10,7 @@ import java.util.function.Function
  */
 object MosaicUtils {
 
-    private val mask = 0x00ff
+    private const val mask = 0x00ff
 
     private val asteriskCache = CacheBuilder.newBuilder()
             .maximumSize(10)
@@ -327,7 +327,7 @@ object MosaicUtils {
          * 异常时返回源字符串
          */
         override fun returnSrcOnError(): DefaultMosaicBuild {
-            this.exceptionHandle = { throwable, src, defect -> src }
+            this.exceptionHandle = { _, src, _ -> src }
             return this
         }
 
@@ -335,7 +335,7 @@ object MosaicUtils {
          * 异常时返回已完成的打码字符串
          */
         override fun returnDefectOnError(): DefaultMosaicBuild {
-            this.exceptionHandle = { throwable, src, defect -> defect }
+            this.exceptionHandle = { _, _, defect -> defect }
             return this
         }
 
@@ -345,7 +345,7 @@ object MosaicUtils {
          * @param defaultTxt -异常时返回的文本
          */
         override fun returnOnError(defaultTxt: String): DefaultMosaicBuild {
-            this.exceptionHandle = { throwable, src, defect -> defaultTxt }
+            this.exceptionHandle = { _, _, _ -> defaultTxt }
             return this
         }
 
@@ -389,18 +389,18 @@ object MosaicUtils {
                                 result: CharArray, resultPos: Int,
                                 len: Int): Int {
             var result = result
-            var len = len
-            if (src.size - srcPos - len < 0) {
-                len = src.size - srcPos
-                if (len < 0) {
+            var fixLen = len
+            if (src.size - srcPos - fixLen < 0) {
+                fixLen = src.size - srcPos
+                if (fixLen < 0) {
                     return 0
                 }
             }
-            if (needGrowCapacity(srcAndResult, resultPos + len)) {
+            if (needGrowCapacity(srcAndResult, resultPos + fixLen)) {
                 result = srcAndResult[1]
             }
-            System.arraycopy(src, srcPos, result, resultPos, len)
-            return len
+            System.arraycopy(src, srcPos, result, resultPos, fixLen)
+            return fixLen
         }
 
         /**

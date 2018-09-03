@@ -98,7 +98,7 @@ class ClipboardDialog : JDialog() {
 
 //        autoComputer.listenOn { EventQueue.invokeLater { it() } }
 
-        //title/content不为空时,remove_button可用
+        //title/content不为空时,save_button可用
         autoComputer.bindEnable(save_button!!)
                 .with(title_textField!!)
                 .with(content_textArea!!)
@@ -158,9 +158,9 @@ class ClipboardDialog : JDialog() {
                 .toList()
                 .toMutableList()
         datas.add("-新增-")
-        val datasModel = DefaultComboBoxModel(datas.toTypedArray())
+        val listModel = DefaultComboBoxModel(datas.toTypedArray())
         EventQueue.invokeLater {
-            title_list?.model = datasModel
+            title_list?.model = listModel
             title_list?.selectedIndex = 0
         }
 //        selectData(0)

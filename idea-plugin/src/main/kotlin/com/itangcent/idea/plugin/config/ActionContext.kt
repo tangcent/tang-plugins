@@ -17,6 +17,11 @@ import java.util.concurrent.locks.ReentrantLock
 import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
 
+/**
+ * Action上下文
+ * 包含一个guice的injector，来管理所有生成的实例
+ * 包含一个CountLatch，来维持子进程状态
+ */
 class ActionContext {
 
     private val cache = HashMap<String, Any>()

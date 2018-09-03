@@ -27,7 +27,7 @@ class InnerClassAction : AnAction("Inner Class") {
             if (editor != null) {
                 document = editor.document
                 val lineCount = document.lineCount
-                //region 委托WriteCommandAction执行-------------------------------------
+                //region 委托actionContext在UI线程执行-------------------------------------
                 WriteCommandAction.runWriteCommandAction(project) {
                     //region build inner class--------------------------------------
                     for (line in lineCount - 1 downTo -1 + 1) {
@@ -56,7 +56,7 @@ class InnerClassAction : AnAction("Inner Class") {
                     //endregion Move caret to inner class------------------------------
                 }
             }
-            //endregion 委托WriteCommandAction执行-------------------------------------
+            //endregion 委托actionContext在UI线程执行-------------------------------------
         } catch (ignored: Exception) {
         }
 

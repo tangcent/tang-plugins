@@ -25,7 +25,7 @@ class ModificationTagAction : InitAnAction("Modification Tag") {
             val editor = anActionEvent.getData(PlatformDataKeys.EDITOR) ?: return
             val document = editor.document
             val lineCount = document.lineCount
-            //region 委托WriteCommandAction执行-------------------------------------
+            //region 委托actionContext在UI线程执行-------------------------------------
             actionContext.runInUi {
                 var classStartLine = -1
                 for (line in 0 until lineCount) {
@@ -56,7 +56,7 @@ class ModificationTagAction : InitAnAction("Modification Tag") {
                 }
                 ActionUtils.format(anActionEvent)
             }
-            //endregion 委托WriteCommandAction执行-------------------------------------
+            //endregion 委托actionContext在UI线程执行-------------------------------------
         } catch (ignored: Exception) {
         }
 
