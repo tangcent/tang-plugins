@@ -31,17 +31,17 @@ class SaveToClipboardAction : InitAnAction("Save to clipboard") {
                     if (StringUtils.isNoneEmpty(selectedText)) {
                         //保存当前选中的内容
                         clipboardData.content = selectedText
-                        clipboardManager.saveData(clipboardData)
-                        return@runInReadUi
+                    } else {
+                        //保存当前文档
+                        val path = StringUtils.substringBetween(editor.document.toString(), "[", "]")
+                        clipboardData.title = StringUtils.substringAfterLast(path, "/")
+                        clipboardData.content = editor.document.text
                     }
+                    clipboardManager.saveData(clipboardData)
                 } catch (e: Exception) {
                     logger!!.error("error save selected text:" + ExceptionUtils.getStackTrace(e))
                 }
 
-                val path = StringUtils.substringBetween(editor.document.toString(), "[", "]")
-                clipboardData.title = StringUtils.substringAfterLast(path, "/")
-                clipboardData.content = editor.document.text
-                clipboardManager.saveData(clipboardData)
             }
 
         }

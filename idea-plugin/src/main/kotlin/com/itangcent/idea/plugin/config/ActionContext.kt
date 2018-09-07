@@ -196,7 +196,7 @@ class ActionContext {
     }
 
     /**
-     * 主线程完成,在异步线程上等待完成
+     * 主线程完成,在异步线程上等待子线程完成
      * warning:调用waitComplete*方法将清除当前线程绑定的ActionContext
      * @see ActionContext.waitComplete
      */
@@ -258,21 +258,21 @@ class ActionContext {
         private const val cachePrefix = "cache_"
         private const val eventPrefix = "event_"
 
-        private var contextHandle: ThreadLocal<ActionContext> = ThreadLocal()
+        private var localContext: ThreadLocal<ActionContext> = ThreadLocal()
 
         /**
          * 获得当前线程上下文
          */
         public fun getContext(): ActionContext? {
-            return contextHandle.get()
+            return localContext.get()
         }
 
         private fun setContext(actionContext: ActionContext) {
-            contextHandle.set(actionContext)
+            localContext.set(actionContext)
         }
 
         private fun clearContext() {
-            contextHandle.remove()
+            localContext.remove()
         }
 
         /**

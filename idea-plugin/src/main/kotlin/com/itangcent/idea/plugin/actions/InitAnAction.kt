@@ -44,8 +44,10 @@ abstract class InitAnAction : AnAction {
             }
         } else {
             log.info("Found unfinished task!")
-            Messages.showMessageDialog(project, "Found unfinished task! ",
-                    "Error", Messages.getInformationIcon())
+            actionContext.runInUi {
+                Messages.showMessageDialog(project, "Found unfinished task! ",
+                        "Error", Messages.getInformationIcon())
+            }
         }
         actionContext.waitCompleteAsync()
     }

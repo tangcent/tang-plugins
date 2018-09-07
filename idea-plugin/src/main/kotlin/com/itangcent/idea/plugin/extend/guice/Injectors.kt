@@ -1,6 +1,9 @@
 package com.itangcent.idea.plugin.extend.guice
 
-import com.google.inject.*
+import com.google.inject.ConfigurationException
+import com.google.inject.Injector
+import com.google.inject.ProvisionException
+import com.google.inject.Singleton
 import com.google.inject.binder.LinkedBindingBuilder
 import com.google.inject.binder.ScopedBindingBuilder
 import kotlin.reflect.KClass
@@ -24,6 +27,15 @@ fun <T : Any> Injector.instance(kClass: KClass<T>): T {
  */
 fun ScopedBindingBuilder.at(scopeAnnotation: KClass<out Annotation>) {
     return this.`in`(scopeAnnotation.java)
+}
+
+/**
+ * wrap [`in`(Singleton::class.java)]
+ *
+ * @see com.google.inject.binder.ScopedBindingBuilder.in
+ */
+fun ScopedBindingBuilder.singleton() {
+    return this.`in`(Singleton::class.java)
 }
 
 /** See the EDSL examples at [com.google.inject.Binder].  */

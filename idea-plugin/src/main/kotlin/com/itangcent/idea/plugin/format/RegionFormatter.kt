@@ -25,12 +25,12 @@ class RegionFormatter : Formatter {
             val lineText = document.getText(TextRange.create(start, end))
             var trimText = lineText.trim { it <= ' ' }
             if (trimText.startsWith("//region")) {
-                val firstCharacter = StringUtils.firstCharacter(lineText)
-                trimText = org.apache.commons.lang.StringUtils.rightPad(trimText, padSize - firstCharacter, "-")
-                document.replaceString(start + firstCharacter, end, trimText)
-                regionStack.add(trimText.substring(8))
+                val firstCharacterIndex = StringUtils.firstCharacterIndex(lineText)
+                trimText = org.apache.commons.lang.StringUtils.rightPad(trimText, padSize - firstCharacterIndex, "-")
+                document.replaceString(start + firstCharacterIndex, end, trimText)
+                regionStack.add(trimText.substring(8))//remove //region
             } else if (trimText.startsWith("//endregion")) {
-                val realStart = start + StringUtils.firstCharacter(lineText)
+                val realStart = start + StringUtils.firstCharacterIndex(lineText)
                 document.replaceString(realStart, end, "//endregion" + regionStack.pop())
             }
         } catch (ignored: Exception) {

@@ -5,7 +5,7 @@ package com.itangcent.tang.common.utils
  */
 object StringUtils {
 
-    fun firstCharacter(charSequence: CharSequence): Int {
+    fun firstCharacterIndex(charSequence: CharSequence): Int {
         for (i in 0 until charSequence.length) {
             if (charSequence[i] > ' ') {
                 return i
