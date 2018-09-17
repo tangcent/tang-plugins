@@ -370,6 +370,7 @@ class AutoComputer {
 
         private var pool: (() -> Unit) -> Unit = { it() }
 
+        @Suppress("UNCHECKED_CAST")
         fun listenOn(pool: (() -> Unit) -> Unit): C {
             this.pool = pool
             return this as C

@@ -29,7 +29,7 @@ class RxSwingBinders : Disposable {
     }
 
     override fun isDisposed(): Boolean {
-        return compositeDisposable.isDisposed()
+        return compositeDisposable.isDisposed
     }
 
 
@@ -56,7 +56,7 @@ class RxSwingBinders : Disposable {
                     emitter.onNext(e)
                 }
             })
-        }.doOnSubscribe { compositeDisposable::add };
+        }.doOnSubscribe { compositeDisposable::add }
     }
 
     fun <T> onChange(jList: JList<T>?): Observable<ListSelectionEvent> {
@@ -64,7 +64,7 @@ class RxSwingBinders : Disposable {
             jList?.selectionModel?.addListSelectionListener { e ->
                 emitter.onNext(e)
             }
-        }.doOnSubscribe { compositeDisposable::add };
+        }.doOnSubscribe { compositeDisposable::add }
     }
 
 }

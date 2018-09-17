@@ -8,7 +8,7 @@ abstract class AbstractLogger : Logger {
 
     override fun log(level: String?, msg: String) {
         try {
-            var formatMsg: String?
+            val formatMsg: String?
 
             if (org.apache.commons.lang3.StringUtils.isEmpty(level)) {
                 formatMsg = msg + Utils.newLine()

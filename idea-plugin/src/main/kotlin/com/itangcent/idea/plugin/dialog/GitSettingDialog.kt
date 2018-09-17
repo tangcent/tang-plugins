@@ -3,6 +3,7 @@ package com.itangcent.idea.plugin.dialog
 import com.google.inject.Inject
 import com.intellij.openapi.ui.Messages
 import com.intellij.util.containers.stream
+import com.itangcent.idea.plugin.config.ActionContext
 import com.itangcent.idea.plugin.extend.guice.PostConstruct
 import com.itangcent.idea.plugin.setting.GitSetting
 import com.itangcent.idea.plugin.setting.SettingManager
@@ -25,6 +26,9 @@ class GitSettingDialog : JDialog() {
 
     @Inject
     public val settingManager: SettingManager? = null
+
+    @Inject
+    val actionContext: ActionContext? = null
 
     init {
 
@@ -57,6 +61,8 @@ class GitSettingDialog : JDialog() {
 
     @PostConstruct
     fun postConstruct() {
+
+        actionContext!!.hold()
         refreshHost()
     }
 
@@ -140,5 +146,6 @@ class GitSettingDialog : JDialog() {
     private fun onCancel() {
         // add your code here if necessary
         dispose()
+        actionContext!!.unHold()
     }
 }
