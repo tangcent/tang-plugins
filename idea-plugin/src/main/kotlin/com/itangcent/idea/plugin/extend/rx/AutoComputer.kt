@@ -358,12 +358,14 @@ class AutoComputer {
 
         @Suppress("UNCHECKED_CAST")
         open fun eval(exp: E) {
-            val evalFun: () -> Unit = { pool { evalFun(exp) } }
-            core.computer.addPassiveListeners(core.property as ASetter<Any?>, evalFun)
-            core.computer.addListeners(evalFun, core.params)
+//            val evalFun: () -> Unit = { pool { evalFun(exp) } }
+            val evalFun: () -> Unit = evalFun(exp)
+            val pooledEvalFun: () -> Unit = { pool(evalFun) }
+            core.computer.addPassiveListeners(core.property as ASetter<Any?>, pooledEvalFun)
+            core.computer.addListeners(pooledEvalFun, core.params)
             if (core.linkedParams != null) {
                 for (kProperty in (core.linkedParams as List<AGetter<Any?>>)) {
-                    core.computer.addListeners(evalFun, kProperty)
+                    core.computer.addListeners(pooledEvalFun, kProperty)
                 }
             }
         }
