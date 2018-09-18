@@ -33,7 +33,7 @@ class ClipboardDialog : JDialog() {
 
     private var selectedClipboardData: ClipboardData? = null
 
-    private var editedClipboardData: ClipboardData = ClipboardData()
+    private val editedClipboardData: ClipboardData = ClipboardData()
 
 //    private val rxSwingBinders: RxSwingBinders by lazy { RxSwingBinders() }
 
@@ -129,11 +129,13 @@ class ClipboardDialog : JDialog() {
                 .with<String?>(this, "this.selectedClipboardData.id")
                 .option { it.map { id -> clipboardManager!!.getContent(id)!! }.orElse("") }
 
-        autoComputer.bind<String>(this, "this.editedClipboardData.content").from(content_textArea!!)
-//
-        autoComputer.bind<String>(this, "this.editedClipboardData.title").from(title_textField!!)
-
-        autoComputer.bind<String>(this, "this.editedClipboardData.id").from<String?>(this, "this.selectedClipboardData.id")
+        autoComputer.bind(this.editedClipboardData::content).from(content_textArea!!)
+        autoComputer.bind(this.editedClipboardData::title).from(title_textField!!)
+        autoComputer.bind(this.editedClipboardData::id).from(this, "this.selectedClipboardData.id")
+////
+//        autoComputer.bind<String>(this, "this.editedClipboardData.content").from(content_textArea!!)
+//        autoComputer.bind<String>(this, "this.editedClipboardData.title").from(title_textField!!)
+//        autoComputer.bind<String>(this, "this.editedClipboardData.id").from<String?>(this, "this.selectedClipboardData.id")
 
 
 //        rxSwingBinders.onChange(title_textField)
