@@ -1,5 +1,13 @@
 #tang-plugins
 
+# plugin
+```text
+    https://github.com/tangcent/tang-plugins/plugin/idea-plugin.jar
+```
+# build
+```bash
+ ./plugin-script/build_plugin.sh
+```
 
 #actions
 

@@ -13,4 +13,4 @@ echo "baseDir:"$basedir
 
 cd $basedir/idea-plugin
 ../gradlew clean buildPlugin --stacktrace
-scp $basedir/idea-plugin/build/libs/*.jar ~/bak/t_plugins/
+mv $basedir/idea-plugin/build/libs/*.jar $basedir/plugin/tang-plugin.jar
