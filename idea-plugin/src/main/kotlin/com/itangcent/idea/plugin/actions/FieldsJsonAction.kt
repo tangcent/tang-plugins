@@ -5,7 +5,6 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.project.Project
 import com.itangcent.idea.plugin.config.ActionContext
 import com.itangcent.idea.plugin.fields.FieldJsonGenerator
-import com.itangcent.idea.plugin.logger.Logger
 import com.itangcent.idea.plugin.util.ActionUtils
 import com.itangcent.tang.common.exception.ProcessCanceledException
 import org.apache.commons.lang3.exception.ExceptionUtils
@@ -23,7 +22,7 @@ class FieldsJsonAction : LoggedAnAction("To Json") {
                 val document = editor.document
                 val fieldJsonGenerator = FieldJsonGenerator()
                 //region 委托actionContext在UI线程执行---------------------------------
-                actionContext.runInUi {
+                actionContext.runInWriteUi {
                     val generateFieldJson = fieldJsonGenerator.generateFieldJson(editor, document)
                     logger.info("\n$generateFieldJson\n")
                     success("TOJSON", "")

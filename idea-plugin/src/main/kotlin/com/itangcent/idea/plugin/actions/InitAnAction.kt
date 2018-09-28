@@ -34,7 +34,7 @@ abstract class InitAnAction : AnAction {
                     actionPerformed(actionContext, project, anActionEvent)
                 } catch (ex: Exception) {
                     log.info("Error:${ex.message}trace:${ExceptionUtils.getStackTrace(ex)}")
-                    actionContext.runInUi {
+                    actionContext.runInWriteUi {
                         Messages.showMessageDialog(project, when (ex) {
                             is ProcessCanceledException -> ex.stopMsg
                             else -> "Error at:${ex.message}trace:${ExceptionUtils.getStackTrace(ex)}"
@@ -44,7 +44,7 @@ abstract class InitAnAction : AnAction {
             }
         } else {
             log.info("Found unfinished task!")
-            actionContext.runInUi {
+            actionContext.runInWriteUi {
                 Messages.showMessageDialog(project, "Found unfinished task! ",
                         "Error", Messages.getInformationIcon())
             }

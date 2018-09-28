@@ -1,6 +1,5 @@
 package com.itangcent.idea.plugin.actions
 
-import com.google.inject.Inject
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
@@ -35,7 +34,7 @@ abstract class LoggedAnAction : AnAction {
                     actionContext.cache(CacheKey.STARTTIME, startTime)
                     actionPerformed(actionContext, project, anActionEvent)
                 } catch (ex: Exception) {
-                    actionContext.runInUi {
+                    actionContext.runInWriteUi {
                         Messages.showMessageDialog(project, "Error at:" + ex.message
                                 + "trace:" + ExceptionUtils.getStackTrace(ex),
                                 "Error", Messages.getInformationIcon())

@@ -1,9 +1,5 @@
-package com.pengshu.loki.core.files
+package com.itangcent.tang.common.files
 
-import com.itangcent.tang.common.files.DirFilter
-import com.itangcent.tang.common.files.FileFilter
-import com.itangcent.tang.common.files.FileHandle
-import com.itangcent.tang.common.files.andThen
 import java.io.File
 import java.util.*
 

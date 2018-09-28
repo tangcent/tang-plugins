@@ -11,6 +11,7 @@ import com.itangcent.tang.common.concurrent.AQSCountLatch
 import com.itangcent.tang.common.concurrent.CountLatch
 import com.itangcent.tang.common.utils.IDUtils
 import com.itangcent.tang.common.utils.ThreadPoolUtils
+import java.awt.EventQueue
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.locks.ReentrantLock
@@ -130,10 +131,23 @@ class ActionContext {
         }
     }
 
+    fun runInSwingUi(runnable: () -> Unit) {
+        countLatch.down()
+        EventQueue.invokeLater {
+            try {
+                ActionContext.setContext(this)
+                runnable()
+            } finally {
+                ActionContext.clearContext()
+                countLatch.up()
+            }
+        }
+    }
+
     /**
      * todo:判断当前线程是否为UI线程
      */
-    fun runInUi(runnable: Runnable) {
+    fun runInWriteUi(runnable: Runnable) {
         val project = this.getCache<Project>(CacheKey.PROJECT)
         countLatch.down()
         WriteCommandAction.runWriteCommandAction(project) {
@@ -150,7 +164,7 @@ class ActionContext {
     /**
      * todo:判断当前线程是否为UI线程
      */
-    fun runInUi(runnable: () -> Unit) {
+    fun runInWriteUi(runnable: () -> Unit) {
         val project = this.getCache<Project>(CacheKey.PROJECT)
         countLatch.down()
         WriteCommandAction.runWriteCommandAction(project) {

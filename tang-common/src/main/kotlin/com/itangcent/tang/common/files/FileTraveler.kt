@@ -1,7 +1,4 @@
-package com.pengshu.loki.core.files
-
-import com.itangcent.tang.common.files.FileFilter
-import com.itangcent.tang.common.files.FileHandle
+package com.itangcent.tang.common.files
 
 /**
  * Created by TomNg on 2017/2/12.

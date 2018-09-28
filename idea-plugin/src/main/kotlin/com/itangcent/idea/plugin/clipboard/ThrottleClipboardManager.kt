@@ -21,6 +21,7 @@ class ThrottleClipboardManager(private var clipboardManager: ClipboardManager) :
     fun throttle(duration: Long, unit: TimeUnit) {
         val newFilterCache = CacheBuilder
                 .newBuilder()
+                .maximumSize(100)
                 .expireAfterWrite(duration, unit)
                 .build<String, Int>()
         newFilterCache.putAll(filterCache.asMap())

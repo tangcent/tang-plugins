@@ -1,4 +1,4 @@
-package com.pengshu.loki.core.files
+package com.itangcent.tang.common.files
 
 /**
  * Created by TomNg on 2017/2/12.

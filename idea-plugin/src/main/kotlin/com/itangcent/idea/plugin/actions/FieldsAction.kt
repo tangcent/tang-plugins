@@ -26,7 +26,7 @@ class FieldsAction : InitAnAction("Generate Fields") {
             val document = editor.document
             val fieldGenerator = FieldGenerator()
             //region 委托actionContext在UI线程执行---------------------------------
-            actionContext.runInUi {
+            actionContext.runInWriteUi {
                 try {
                     fieldGenerator.generateFields(editor, document)
                 } catch (e: Exception) {

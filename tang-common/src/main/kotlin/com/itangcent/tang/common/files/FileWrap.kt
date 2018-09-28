@@ -1,4 +1,4 @@
-package com.pengshu.loki.core.files
+package com.itangcent.tang.common.files
 
 
 import com.itangcent.tang.common.utils.FileUtils
@@ -27,7 +27,7 @@ class FileWrap(private val root: String, var file: File) {
         try {
             FileUtils.write(file, content)
         } catch (e: IOException) {
-            System.out.printf("error to write file:" + file)
+            System.out.printf("error to write file:$file")
         }
 
     }

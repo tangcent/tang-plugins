@@ -11,7 +11,7 @@ import com.itangcent.tang.common.exception.ProcessCanceledException
 import com.itangcent.tang.common.files.FileFilter
 import com.itangcent.tang.common.files.FileHandle
 import com.itangcent.tang.common.utils.SystemUtils
-import com.pengshu.loki.core.files.DefaultFileTraveler
+import com.itangcent.tang.common.files.DefaultFileTraveler
 import org.apache.commons.lang3.ObjectUtils
 import java.util.*
 

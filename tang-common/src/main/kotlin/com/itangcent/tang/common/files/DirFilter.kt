@@ -1,7 +1,5 @@
 package com.itangcent.tang.common.files
 
-import com.pengshu.loki.core.files.FileWrap
-
 /**
  * Created by TomNg on 2017/2/12.
  */
