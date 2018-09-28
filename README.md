@@ -1,15 +1,16 @@
 #tang-plugins
 
-# plugin
-```text
-    https://github.com/tangcent/tang-plugins/plugin/idea-plugin.jar
-```
-# build
+## Install
+
+- [Download](https://github.com/tangcent/tang-plugins/plugin/idea-plugin.jar) the plugin jar and select "Install Plugin From Disk" in IntelliJ's plugin preferences.
+
+## build
+
 ```bash
  ./plugin-script/build_plugin.sh
 ```
 
-#actions
+##actions
 
 ```xml
     <actions>
