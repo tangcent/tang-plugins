@@ -2,15 +2,18 @@
 
 ## Install
 
-- [Download](https://github.com/tangcent/tang-plugins/blob/master/plugin/tang-plugin.jar) the plugin jar and select "Install Plugin From Disk" in IntelliJ's plugin preferences.
+- [Download](https://github.com/tangcent/tang-plugins/raw/master/plugin/tang-plugin.jar) the plugin jar and select "Install Plugin From Disk" in IntelliJ's plugin preferences.
 
 ## build
 
 ```bash
  ./plugin-script/build_plugin.sh
 ```
+## keyboard-shortcut
+-  (alt S):Save selected text to clipboard
+-  (ctrl alt S)/(command alt S):open clipboard
 
-##actions
+## actions
 
 ```xml
     <actions>

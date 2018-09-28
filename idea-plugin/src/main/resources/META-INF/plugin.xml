@@ -34,7 +34,9 @@
             <action id="com.itangcent.idea.plugin.actions.SettingAction"
                     class="com.itangcent.idea.plugin.actions.SettingAction" text="Setting" description="Setting"/>
             <action id="com.itangcent.idea.plugin.actions.ClipboardAction"
-                    class="com.itangcent.idea.plugin.actions.ClipboardAction" text="Clipboard" description="Clipboard"/>
+                    class="com.itangcent.idea.plugin.actions.ClipboardAction" text="Clipboard" description="Clipboard">
+                <keyboard-shortcut keymap="$default" first-keystroke="ctrl alt S"/>
+            </action>
         </group>
 
         <group id="TmGenerateExt" text="_TmGenerateExt" description="Tm XMenu">
@@ -43,23 +45,23 @@
                     class="com.itangcent.idea.plugin.actions.FieldsAction"
                     text="_Generate Fields" description="T_Generate Fields">
             </action>
+
             <action id="com.itangcent.idea.plugin.actions.ModificationTagAction"
                     class="com.itangcent.idea.plugin.actions.ModificationTagAction" text="ModificationTag"
                     description="ModificationTag"/>
+
             <action id="com.itangcent.idea.plugin.actions.InnerClassAction"
                     class="com.itangcent.idea.plugin.actions.InnerClassAction" text="InnerClass"
                     description="InnerClass"/>
+
             <action id="com.itangcent.idea.plugin.actions.SaveToClipboardAction"
                     class="com.itangcent.idea.plugin.actions.SaveToClipboardAction" text="SaveToClipboard"
-                    description="Save to clipboard"/>
+                    description="Save to clipboard">
+                <add-to-group group-id="EditMenu" anchor="first"/>
+                <add-to-group group-id="EditorPopupMenu" anchor="first"/>
+                <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
+            </action>
         </group>
 
-        <action id="com.itangcent.idea.plugin.actions.SaveToClipboardAction"
-                class="com.itangcent.idea.plugin.actions.SaveToClipboardAction" text="SaveToClipboard"
-                description="Save to clipboard">
-            <add-to-group group-id="EditMenu" anchor="first"/>
-            <add-to-group group-id="EditorPopupMenu" anchor="first"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="alt S"/>
-        </action>
     </actions>
 </idea-plugin>
