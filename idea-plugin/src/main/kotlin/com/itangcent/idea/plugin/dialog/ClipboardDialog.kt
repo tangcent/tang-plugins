@@ -159,7 +159,7 @@ class ClipboardDialog : JDialog() {
                 .map { clipboardData -> titleFormat(clipboardData.title) }
                 .toList()
                 .toMutableList()
-        datas.add("-新增-")
+        datas.add("-new-")
         val listModel = DefaultComboBoxModel(datas.toTypedArray())
         EventQueue.invokeLater {
             title_list?.model = listModel

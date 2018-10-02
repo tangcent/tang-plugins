@@ -72,7 +72,7 @@ class GitSettingDialog : JDialog() {
                 .map { setting -> setting.host }
                 .toList()
                 .toMutableList()
-        hosts!!.add("-新增-")
+        hosts!!.add("-new-")
         val hostModel = DefaultComboBoxModel(hosts!!.toTypedArray())
         host_list?.model = hostModel
         host_list?.selectedIndex = 0
