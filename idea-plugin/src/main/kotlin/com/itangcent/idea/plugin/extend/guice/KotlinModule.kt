@@ -36,6 +36,7 @@ open class KotlinModule : AbstractModule() {
                                                    encounterProvider: EncounterProvider<MethodHandler<Any?, Annotation>>) {
         bindListener(Matchers.any(), object : TypeListener {
             override fun <I> hear(injectableType: TypeLiteral<I>, encounter: TypeEncounter<I>) {
+                // #todo:provider暂时无法完成PostConstruct
                 val type = injectableType.rawType
                 val methods = type.declaredMethods
                 for (method in methods) {

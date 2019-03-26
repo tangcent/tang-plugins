@@ -13,8 +13,7 @@ class DialogReleaseMessageInput : ReleaseMessageInput {
     @Inject
     private val logger: Logger? = null
 
-    override//        ReleaseIIDialog releaseDialog = UIUtils.create(ReleaseIIDialog.class);
-    val releaseMessage: Map<String, String>
+    override val releaseMessage: Map<String, String>
         get() {
             val resultHolder = ResultHolder<Map<String, String>>()
             val releaseDialog = ReleaseDialog()

@@ -5,7 +5,7 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
-import com.itangcent.idea.plugin.config.ActionContext
+import com.itangcent.idea.plugin.context.ActionContext
 import com.itangcent.idea.plugin.util.ActionUtils
 import com.itangcent.idea.plugin.util.DocumentUtils
 import com.itangcent.idea.plugin.util.EditorUtils
@@ -19,14 +19,14 @@ class InnerClassAction : InitAnAction("Inner Class") {
         actionContext.runInSwingUi {
             val className = Messages.showInputDialog(project, "Input Class Name", "New Inner Class", Messages.getQuestionIcon())
                     ?: return@runInSwingUi
-            try {
-                val editor = anActionEvent.getData(PlatformDataKeys.EDITOR)
-                val document: Document
-                if (editor != null) {
-                    document = editor.document
-                    val lineCount = document.lineCount
-                    //region 委托actionContext在UI线程执行-------------------------------------
-                    actionContext.runInWriteUi {
+            actionContext.runInWriteUi {
+                try {
+                    val editor = anActionEvent.getData(PlatformDataKeys.EDITOR)
+                    val document: Document
+                    if (editor != null) {
+                        document = editor.document
+                        val lineCount = document.lineCount
+
                         //region build inner class--------------------------------------
                         for (line in lineCount - 1 downTo -1 + 1) {
                             val lineText = DocumentUtils.getLineText(document, line)
@@ -53,12 +53,11 @@ class InnerClassAction : InitAnAction("Inner Class") {
                         }
                         //endregion Move caret to inner class------------------------------
                     }
+                    //endregion 委托actionContext在UI线程执行-------------------------------------
+                } catch (ignored: Exception) {
                 }
-                //endregion 委托actionContext在UI线程执行-------------------------------------
-            } catch (ignored: Exception) {
             }
         }
-
     }
 
     private fun createClass(className: String?): String {

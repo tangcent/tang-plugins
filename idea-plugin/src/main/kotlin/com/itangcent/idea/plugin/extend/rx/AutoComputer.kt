@@ -85,18 +85,14 @@ class AutoComputer {
             }
 
             //call relative
-            for (key in listeners.keys) {
-                if (isrelative(key, getter)) {
-                    listeners[key]?.invoke()
-                }
-            }
+            listeners.keys
+                    .filter { isRelative(it, getter) }
+                    .forEach { listeners[it]?.invoke() }
 
             //call relative，重新计算子节点
-            for (key in passiveListeners.keys) {
-                if (isSon(key, getter)) {
-                    passiveListeners[key]?.invoke()
-                }
-            }
+            passiveListeners.keys
+                    .filter { isSon(it, getter) }
+                    .forEach { passiveListeners[it]?.invoke() }
         } finally {
             if (doAction) {
                 popAction()
@@ -142,7 +138,7 @@ class AutoComputer {
     }
     //endregion 触发计算---------------------------------------------------------------
 
-    private fun isrelative(getter: AGetter<*>, anotherGetter: AGetter<*>): Boolean {
+    private fun isRelative(getter: AGetter<*>, anotherGetter: AGetter<*>): Boolean {
         return when {
             getter == anotherGetter -> false
             getter !is HasProperty<*> -> false

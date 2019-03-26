@@ -1,5 +1,8 @@
 package com.itangcent.idea.plugin.util
 
+import com.intellij.psi.PsiClass
+import com.intellij.psi.PsiField
+
 object FieldUtils {
 
     fun buildFiledName(fieldName: String): String {
@@ -14,5 +17,9 @@ object FieldUtils {
             }
         }
         return stringBuilder.toString()
+    }
+
+    fun findField(psiClass: PsiClass, fieldName: String): PsiField? {
+        return psiClass.allFields.firstOrNull { it.name == fieldName }
     }
 }

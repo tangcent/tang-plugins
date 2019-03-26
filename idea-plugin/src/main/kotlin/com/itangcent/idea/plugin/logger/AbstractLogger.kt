@@ -1,6 +1,7 @@
 package com.itangcent.idea.plugin.logger
 
 import com.itangcent.idea.plugin.util.Utils
+import org.apache.commons.lang3.StringUtils
 
 abstract class AbstractLogger : Logger {
 
@@ -8,13 +9,12 @@ abstract class AbstractLogger : Logger {
 
     override fun log(level: String?, msg: String) {
         try {
-            val formatMsg: String?
-
-            if (org.apache.commons.lang3.StringUtils.isEmpty(level)) {
-                formatMsg = msg + Utils.newLine()
-            } else {
-                formatMsg = "[" + level + "]\t" + msg + Utils.newLine()
-            }
+            val formatMsg: String? =
+                    if (StringUtils.isEmpty(level)) {
+                        msg + Utils.newLine()
+                    } else {
+                        "[" + level + "]\t" + msg + Utils.newLine()
+                    }
             processLog(formatMsg)
         } catch (e: InterruptedException) {
             e.printStackTrace()

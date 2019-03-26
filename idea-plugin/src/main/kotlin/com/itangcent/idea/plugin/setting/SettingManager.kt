@@ -1,13 +1,10 @@
 package com.itangcent.idea.plugin.setting
 
-import com.google.inject.ImplementedBy
-
-@ImplementedBy(DefaultSettingManager::class)
 interface SettingManager {
 
-    val gitSettings: Array<GitSetting>?
+    val tokenSettings: Array<TokenSetting>?
 
-    fun getGitSetting(host: String?): GitSetting?
+    fun getSetting(host: String?): TokenSetting?
 
-    fun saveGitSetting(gitSetting: GitSetting)
+    fun saveGitSetting(tokenSetting: TokenSetting)
 }

@@ -15,7 +15,6 @@ object DateUtils {
 
     private val regPatternMap = ConcurrentHashMap<Pattern, String>()
 
-
     val currentDay: Date
         get() {
             val cal = Calendar.getInstance()

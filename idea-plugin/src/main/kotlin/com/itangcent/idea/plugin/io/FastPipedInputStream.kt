@@ -393,15 +393,12 @@ class FastPipedInputStream : InputStream {
     @Throws(IOException::class)
     override fun available(): Int {
         lock.withLock {
-
-            return if (inIndex < 0)
-                0
-            else if (inIndex == outIndex)
-                buffer.size
-            else if (inIndex > outIndex)
-                inIndex - outIndex
-            else
-                inIndex + buffer.size - outIndex
+            return when {
+                inIndex < 0 -> 0
+                inIndex == outIndex -> buffer.size
+                inIndex > outIndex -> inIndex - outIndex
+                else -> inIndex + buffer.size - outIndex
+            }
         }
     }
 

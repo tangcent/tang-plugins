@@ -1,7 +1,7 @@
 package com.itangcent.idea.plugin.util
 
 import com.intellij.uiDesigner.core.GridConstraints
-import com.itangcent.idea.plugin.config.ActionContext
+import com.itangcent.idea.plugin.context.ActionContext
 import com.itangcent.idea.plugin.logger.Logger
 import org.apache.commons.lang3.exception.ExceptionUtils
 import java.awt.Dimension

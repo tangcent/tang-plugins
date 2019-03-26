@@ -3,7 +3,7 @@ package com.itangcent.idea.plugin.dialog
 import com.google.inject.Inject
 import com.itangcent.idea.plugin.clipboard.ClipboardData
 import com.itangcent.idea.plugin.clipboard.ClipboardManager
-import com.itangcent.idea.plugin.config.ActionContext
+import com.itangcent.idea.plugin.context.ActionContext
 import com.itangcent.idea.plugin.extend.guice.PostConstruct
 import com.itangcent.idea.plugin.extend.rx.AutoComputer
 import com.itangcent.idea.plugin.extend.rx.from

@@ -20,3 +20,5 @@ tang-common/build/
 gradle/
 
 idea-plugin/\.DS_Store
+
+\.DS_Store

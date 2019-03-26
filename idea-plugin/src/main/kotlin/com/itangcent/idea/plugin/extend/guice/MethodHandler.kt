@@ -9,7 +9,7 @@ import java.lang.reflect.Method
  *
  * @version $Revision: 1.1 $
  */
-interface MethodHandler<I, A : Annotation> {
+interface MethodHandler<in I, in A : Annotation> {
 
     /**
      * Process the given method which is annotated with the annotation

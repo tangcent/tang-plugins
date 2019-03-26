@@ -3,7 +3,7 @@ package com.itangcent.idea.plugin.actions
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.project.Project
-import com.itangcent.idea.plugin.config.ActionContext
+import com.itangcent.idea.plugin.context.ActionContext
 import com.itangcent.idea.plugin.format.Formatter
 import com.itangcent.idea.plugin.format.RegionFormatter
 import com.itangcent.idea.plugin.util.ActionUtils
@@ -38,5 +38,4 @@ class FormatAction : InitAnAction() {
             ActionUtils.format(anActionEvent)
         }
     }
-
 }

@@ -1,48 +1,56 @@
 package com.itangcent.idea.plugin.fields
 
-import com.intellij.openapi.editor.Document
-import com.intellij.openapi.editor.Editor
+import com.intellij.lang.jvm.JvmModifier
+import com.intellij.openapi.actionSystem.AnActionEvent
+import com.intellij.openapi.actionSystem.PlatformDataKeys
+import com.intellij.util.containers.stream
+import com.itangcent.idea.plugin.psi.PsiClassHelper.Companion.jvmFieldModifiers
+import com.itangcent.idea.plugin.util.ActionUtils
+import com.itangcent.idea.plugin.util.DocumentUtils
 import com.itangcent.idea.plugin.util.FieldUtils
-import com.sun.source.tree.VariableTree
-import org.apache.commons.collections.CollectionUtils
+import com.itangcent.tang.common.utils.CollectionUtils
 import java.io.IOException
-import kotlin.streams.toList
 
 class FieldGenerator : BasedFieldGenerator() {
 
     @Throws(IOException::class)
-    fun generateFields(editor: Editor, document: Document) {
-        val javaTree = buildTree(document)
-        val classTree = findCurrentClass(javaTree, editor, document) ?: return
+    fun generateFields(anActionEvent: AnActionEvent) {
 
-        val existFields = classTree.members.stream()
-                .filter { VariableTree::class.java.isInstance(it) }
-                .map { node -> node as VariableTree }
-                .map { node -> node.name.toString() }
-                .toList()
+        val currentClass = ActionUtils.findCurrentClass() ?: return
 
-        val fields = classTree.members.stream()
-                .filter { VariableTree::class.java.isInstance(it) }
-                .map { node -> node as VariableTree }
-                .filter { variableTree -> CollectionUtils.containsAny(variableTree.modifiers.flags, BasedFieldGenerator.fieldModifiers) }
-                .map { node -> node.name.toString() }
+        for (field in currentClass.allFields) {
+            field.modifiers
+        }
+
+        val existFields = currentClass.allFields.stream()
+                .map { psiField -> psiField.name }
+                .toArray()
+
+        val fields = currentClass.allFields.stream()
+                .filter { psiField -> CollectionUtils.containsAny(psiField.modifiers, jvmFieldModifiers) }
+                .filter { psiField -> !psiField.hasModifier(JvmModifier.STATIC) }
+                .map { psiField -> psiField.name }
                 .filter { field -> !existFields.contains(FieldUtils.buildFiledName(field)) }
-                .toList()
-        if (CollectionUtils.isEmpty(fields)) {
+                .toArray()
+
+        if (fields.isEmpty()) {
             return
         }
 
-        val insertIndex = javaTree.getEndPosition(classTree) - 1
-        document.insertString(insertIndex.toInt(), generateFields(fields))
+        val editor = anActionEvent.getData(PlatformDataKeys.EDITOR)
+
+        val document = editor!!.document
+        document.insertString(DocumentUtils.getInsertIndex(document), generateStaticFields(fields))
+//        currentClass.add(OwnBufferLeafPsiElement(PlainTextTokenTypes.PLAIN_TEXT, generateStaticFields(fields)))
     }
 
-    private fun generateFields(fields: List<String>): String {
+    private fun generateStaticFields(fields: Array<Any>): String {
         val stringBuilder = StringBuilder()
         stringBuilder.append("\n    //region Fields-------------------------------------------------------------\n")
         for (field in fields) {
 
             stringBuilder.append("    public static final String ")
-                    .append(FieldUtils.buildFiledName(field))
+                    .append(FieldUtils.buildFiledName(field.toString()))
                     .append(" = \"")
                     .append(field)
                     .append("\";\n\n")
@@ -50,4 +58,5 @@ class FieldGenerator : BasedFieldGenerator() {
         stringBuilder.append("    //endregion Fields-------------------------------------------------------------\n")
         return stringBuilder.toString()
     }
+
 }

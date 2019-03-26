@@ -3,7 +3,7 @@ package com.itangcent.idea.plugin.git
 import com.google.inject.Inject
 import com.itangcent.idea.plugin.auth.AuthProvider
 import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.idea.plugin.setting.GitSetting
+import com.itangcent.idea.plugin.setting.TokenSetting
 import com.itangcent.idea.plugin.setting.SettingManager
 import com.itangcent.tang.common.utils.DateUtils
 import com.itangcent.tang.common.utils.GsonUtils
@@ -114,7 +114,7 @@ class DefaultGitRelease : GitRelease {
         }
 
         private fun login(): Boolean {
-            val gitSetting = settingManager!!.getGitSetting(this.gitHost!!)
+            val gitSetting = settingManager!!.getSetting(this.gitHost!!)
             if (gitSetting != null) {
                 doLogin(gitSetting)
                 if (checkApi()) {
@@ -157,7 +157,7 @@ class DefaultGitRelease : GitRelease {
 
         }
 
-        private fun doLogin(gitSetting: GitSetting) {
+        private fun doLogin(gitSetting: TokenSetting) {
             gitlabAPI = GitLabApi(gitHost, gitSetting.privateToken)
         }
 

@@ -4,7 +4,7 @@ import com.google.inject.Inject
 import com.intellij.execution.ExecutionException
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
-import com.itangcent.idea.plugin.config.ActionContext
+import com.itangcent.idea.plugin.context.ActionContext
 import com.itangcent.idea.plugin.constant.CacheKey
 import com.itangcent.idea.plugin.io.PipedProcess
 import org.apache.commons.lang3.exception.ExceptionUtils
@@ -66,10 +66,9 @@ class ConsoleRunnerLogger : AbstractLogger() {
                 }
 
             }
-
         }
 
-        return pipedProcess as PipedProcess
+        return pipedProcess!!
     }
 
     private fun clear() {
@@ -80,13 +79,18 @@ class ConsoleRunnerLogger : AbstractLogger() {
     }
 
     override fun processLog(logData: String?) {
+        if (logData == null) return
         try {
             val pipedProcess = checkProcess()
-            pipedProcess.getOutForInputStream()!!.write(logData!!.toByteArray())
+            val bytes = logData.toByteArray()
+            if (bytes.size > 1024) {
+                pipedProcess.getOutForInputStream()!!.write(bytes)
+            } else {//split?
+                pipedProcess.getOutForInputStream()!!.write(bytes)
+            }
         } catch (ex: IOException) {
             log.warn("Error processLog:", ex)
         }
-
     }
 
     companion object {

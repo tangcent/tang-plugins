@@ -26,7 +26,7 @@ object FileUtils {
             }
             filePattern = formatPattern(filePattern)
             val pattern = Pattern.compile("^$filePattern$")
-            fileFilter = FileFilter { file -> pattern.matcher(file.path).matches() }
+            fileFilter = KTFileFilter { file -> file != null && pattern.matcher(file.path).matches() }
         }
 
         val fileCollector: FileCollector
@@ -59,10 +59,10 @@ object FileUtils {
         private var fileFilter: FileFilter
 
         internal constructor() {
-            fileFilter = FileFilter { file -> file.isDirectory }
+            fileFilter = KTFileFilter { file -> file != null && file.isDirectory }
         }
 
-        internal constructor(filter: FileFilter, depthLimit: Int) : super({ file -> file.isDirectory || filter.accept(file) }, depthLimit) {
+        internal constructor(filter: FileFilter, depthLimit: Int) : super(KTFileFilter { file -> file != null && (file.isDirectory || filter.accept(file)) }, depthLimit) {
             this.fileFilter = filter
         }
 
@@ -217,5 +217,10 @@ object FileUtils {
             return false
     }
 
+    private class KTFileFilter(val filter: (File?) -> Boolean) : FileFilter {
+        override fun accept(pathname: File?): Boolean {
+            return filter(pathname)
+        }
+    }
 
 }

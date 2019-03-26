@@ -14,4 +14,9 @@ public interface Logger {
     fun error(msg: String) {
         log("ERROR", msg)
     }
+
+    fun warn(msg: String) {
+        log("WARN", msg)
+    }
+
 }

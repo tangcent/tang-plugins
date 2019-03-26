@@ -2,9 +2,9 @@ package com.itangcent.idea.plugin.setting
 
 import com.google.inject.Inject
 import com.itangcent.idea.plugin.logger.Logger
+import com.itangcent.tang.common.utils.CollectionUtils
 import com.itangcent.tang.common.utils.GsonUtils
 import com.itangcent.tang.common.utils.SystemUtils
-import org.apache.commons.collections.CollectionUtils
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.exception.ExceptionUtils
@@ -14,7 +14,7 @@ import java.nio.charset.Charset
 import java.util.*
 import kotlin.streams.toList
 
-class DefaultSettingManager : SettingManager {
+open class DefaultSettingManager : SettingManager {
 
     @Inject
     private val logger: Logger? = null
@@ -35,9 +35,10 @@ class DefaultSettingManager : SettingManager {
                 try {
                     FileUtils.forceMkdirParent(file)
                     if (!file.createNewFile()) {
-                        logger!!.error("error to create new setting file")
+                        logger!!.error("error to create new setting file:$repositoryFile")
                     }
-                } catch (e: IOException) {
+                } catch (e: Throwable) {
+                    logger!!.error("error to create new setting file:$repositoryFile\n${ExceptionUtils.getStackTrace(e)}")
                     throw RuntimeException(e)
                 }
 
@@ -53,20 +54,24 @@ class DefaultSettingManager : SettingManager {
 
             if (settingRepository == null) {
                 settingRepository = SettingRepository()
-                settingRepository!!.gitSettings = ArrayList()
+                settingRepository!!.tokenSettings = ArrayList()
             }
             return settingRepository as SettingRepository
         }
 
-    override val gitSettings: Array<GitSetting>?
-        get() = repository.gitSettings?.toTypedArray()
+    override val tokenSettings: Array<TokenSetting>?
+        get() = repository.tokenSettings?.toTypedArray()
 
     @Synchronized
-    private fun init() {
+    open protected fun init() {
         if (settingRepository == null) {
             try {
                 val str = FileUtils.readFileToString(repositoryFile, Charset.defaultCharset())
-                settingRepository = GsonUtils.fromJson(str, SettingRepository::class)
+                settingRepository = if (str.isBlank()) {
+                    SettingRepository()
+                } else {
+                    SettingRepository.fromJson(str)
+                }
             } catch (e: Exception) {
                 logger!!.error("error init settingRepository:" + ExceptionUtils.getStackTrace(e))
             }
@@ -83,37 +88,36 @@ class DefaultSettingManager : SettingManager {
 
     }
 
-    override fun getGitSetting(host: String?): GitSetting? {
+    override fun getSetting(host: String?): TokenSetting? {
         val settingRepository = repository
-        val gitSettings = settingRepository.gitSettings
-        return if (CollectionUtils.isEmpty(gitSettings)) {
+        val tokenSettings = settingRepository.tokenSettings
+        return if (CollectionUtils.isEmpty(tokenSettings)) {
             null
-        } else gitSettings!!
+        } else tokenSettings!!
                 .stream()
                 .filter { gitSetting -> gitSetting.host == host }
                 .findAny()
                 .orElse(null)
     }
 
-    override fun saveGitSetting(gitSetting: GitSetting) {
-
-        if (StringUtils.isBlank(gitSetting.host)) {
+    override fun saveGitSetting(tokenSetting: TokenSetting) {
+        if (StringUtils.isBlank(tokenSetting.host)) {
             return
         }
         val settingRepository = repository
-        var gitSettings: MutableList<GitSetting>? = settingRepository.gitSettings as MutableList<GitSetting>?
-        if (CollectionUtils.isEmpty(gitSettings)) {
-            gitSettings = ArrayList()
+        var tokenSettings: MutableList<TokenSetting>? = settingRepository.tokenSettings as MutableList<TokenSetting>?
+        if (CollectionUtils.isEmpty(tokenSettings)) {
+            tokenSettings = ArrayList()
         } else {
-            gitSettings = gitSettings!!
+            tokenSettings = tokenSettings!!
                     .stream()
-                    .filter { gs -> gs.host != gitSetting.host }
-                    .toList() as MutableList<GitSetting>?
+                    .filter { gs -> gs.host != tokenSetting.host }
+                    .toList() as MutableList<TokenSetting>?
         }
-        if (StringUtils.isNotBlank(gitSetting.privateToken)) {
-            gitSettings!!.add(gitSetting)
+        if (StringUtils.isNotBlank(tokenSetting.privateToken)) {
+            tokenSettings!!.add(tokenSetting)
         }
-        settingRepository.gitSettings = gitSettings
+        settingRepository.tokenSettings = tokenSettings
         saveRepository(settingRepository)
     }
 }

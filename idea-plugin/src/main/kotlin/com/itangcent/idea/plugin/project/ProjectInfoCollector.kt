@@ -2,7 +2,7 @@ package com.itangcent.idea.plugin.project
 
 import com.google.common.collect.ImmutableMap
 import com.google.inject.Inject
-import com.itangcent.idea.plugin.config.ActionContext
+import com.itangcent.idea.plugin.context.ActionContext
 import com.itangcent.idea.plugin.git.GitHelper
 import com.itangcent.idea.plugin.git.GitHelperConnector
 import com.itangcent.idea.plugin.git.GitUtils

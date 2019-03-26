@@ -147,6 +147,7 @@ fun changeTopPropertyValueByName(otherCallableReference: CallableReference, prop
  * change the property value with new value int the special property name inside a class level ,not the property not in any class
  * it likes `changeClassPropertyValueByName` but it can't change the property value to any other type value ,not only with the original property value type.
  */
+@Suppress("UNCHECKED_CAST")
 fun <R> changeClassPropertyValueByNameIgnoreType(classObj: Any, propertyName: String, newValue: R): Boolean {
     val containerClass: Class<*> = classObj::class.java
 

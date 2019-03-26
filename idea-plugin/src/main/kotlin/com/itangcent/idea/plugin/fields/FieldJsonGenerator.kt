@@ -1,43 +1,32 @@
 package com.itangcent.idea.plugin.fields
 
-import com.google.gson.GsonBuilder
-import com.intellij.openapi.editor.Document
-import com.intellij.openapi.editor.Editor
-import com.sun.source.tree.VariableTree
+import com.itangcent.idea.plugin.context.ActionContext
+import com.itangcent.idea.plugin.logger.Logger
+import com.itangcent.idea.plugin.psi.PsiClassHelper
+import com.itangcent.idea.plugin.util.ActionUtils
 import java.io.IOException
-import java.util.*
-import kotlin.streams.toList
+
 
 class FieldJsonGenerator : BasedFieldGenerator() {
 
+    private val logger: Logger = ActionContext.local()
+
     @Throws(IOException::class)
-    fun generateFieldJson(editor: Editor, document: Document): String {
+    fun generateFieldJson(): String {
 
-        val javaTree = buildTree(document)
-        val classTree = findCurrentClass(javaTree, editor, document) ?: return ""
-
-        val fields = classTree.members.stream()
-                .filter { VariableTree::class.java.isInstance(it) }
-                .map { node -> node as VariableTree }
-                .filter(BasedFieldGenerator.filedPredict)
-                .map { node -> node.name.toString() }
-                .toList()
-
-        return generateFieldJson(fields)
-    }
-
-    private fun generateFieldJson(fields: List<String>): String {
-        val map = HashMap<String, String>()
-        for (field in fields) {
-            map[field] = ""
+        val currentClass = ActionUtils.findCurrentClass()
+        if (currentClass == null) {
+            logger.info("no class be selected!")
         }
-        return gson.toJson(map)
-    }
+//        val fields = classTree.members.stream()
+//                .filter { VariableTree::class.java.isInstance(it) }
+//                .map { node -> node as VariableTree }
+//                .filter(BasedFieldGenerator.filedPredict)
+//                .map { node -> node.name.toString() }
+//                .toList()
 
-    companion object {
+        val kv = ActionContext.getContext()!!.instance(PsiClassHelper::class).getFields(currentClass)
+        return kv.toPrettyJson()
 
-        private val gson = GsonBuilder()
-                .setPrettyPrinting()
-                .create()
     }
 }

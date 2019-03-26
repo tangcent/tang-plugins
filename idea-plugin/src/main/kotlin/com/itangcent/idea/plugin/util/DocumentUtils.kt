@@ -17,6 +17,7 @@ package com.itangcent.idea.plugin.util
 
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
+import org.apache.commons.lang.StringUtils
 import java.util.*
 
 object DocumentUtils {
@@ -55,14 +56,28 @@ object DocumentUtils {
         return document.getText(TextRange.create(document.getLineStartOffset(line), document.getLineEndOffset(line)))
     }
 
+    fun getInsertIndex(document: Document): Int {
+        val lineCount = document.lineCount
+        for (line in lineCount - 1 downTo -1 + 1) {
+            val lineText = DocumentUtils.getLineText(document, line)
+            if (StringUtils.isBlank(lineText)) {
+                continue
+            }
+            if (lineText.trim { it <= ' ' }.endsWith("}")) {
+                return document.getLineEndOffset(line) - 1
+            }
+        }
+        return document.textLength - 1;
+
+    }
 
     private val rootStartSet = HashSet<String>()
 
     init {
-        rootStartSet.add("class");
-        rootStartSet.add("interface");
-        rootStartSet.add("enum");
-        rootStartSet.add("@interface");
+        rootStartSet.add("class")
+        rootStartSet.add("interface")
+        rootStartSet.add("enum")
+        rootStartSet.add("@interface")
     }
 
     //region check isRootStart--------------------------------------------------

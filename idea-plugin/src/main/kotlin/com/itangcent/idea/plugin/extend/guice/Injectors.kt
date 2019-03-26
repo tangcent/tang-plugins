@@ -23,7 +23,7 @@ fun <T : Any> Injector.instance(kClass: KClass<T>): T {
 /**
  * See the EDSL examples at [com.google.inject.Binder].
  *
- * @see com.google.inject.binder.ScopedBindingBuilder.in
+ * @see com.google.inject.binder.ScopedBindingBuilder#in
  */
 fun ScopedBindingBuilder.at(scopeAnnotation: KClass<out Annotation>) {
     return this.`in`(scopeAnnotation.java)
@@ -32,7 +32,7 @@ fun ScopedBindingBuilder.at(scopeAnnotation: KClass<out Annotation>) {
 /**
  * wrap [`in`(Singleton::class.java)]
  *
- * @see com.google.inject.binder.ScopedBindingBuilder.in
+ * @see com.google.inject.binder.ScopedBindingBuilder#in
  */
 fun ScopedBindingBuilder.singleton() {
     return this.`in`(Singleton::class.java)
@@ -43,3 +43,9 @@ fun <T : Any> LinkedBindingBuilder<T>.with(implementation: KClass<out T>): Scope
     return this.to(implementation.java)
 }
 
+/**
+ * #todo:provider暂时无法完成PostConstruct
+ */
+inline fun <T : Any, TE : T> LinkedBindingBuilder<T>.withProvider(noinline provider: () -> TE): ScopedBindingBuilder {
+    return this.toProvider(com.google.inject.Provider { provider() })
+}

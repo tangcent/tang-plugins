@@ -3,7 +3,7 @@ package com.itangcent.idea.plugin.git
 import com.google.inject.Inject
 import com.itangcent.idea.plugin.auth.AuthProvider
 import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.idea.plugin.setting.GitSetting
+import com.itangcent.idea.plugin.setting.TokenSetting
 import com.itangcent.idea.plugin.setting.SettingManager
 import org.apache.commons.lang3.exception.ExceptionUtils
 
@@ -21,8 +21,7 @@ class GitHelperConnector {
     fun connect(gitHelper: GitHelper) {
         val gitHost = gitHelper.gitHost
 
-
-        val gitSetting = settingManager!!.getGitSetting(gitHost!!)
+        val gitSetting = settingManager!!.getSetting(gitHost!!)
         if (gitSetting != null) {
             try {
                 if (doLogin(gitHelper, gitSetting)) {
@@ -43,7 +42,7 @@ class GitHelperConnector {
     }
 
 
-    private fun doLogin(gitHelper: GitHelper, gitSetting: GitSetting): Boolean {
+    private fun doLogin(gitHelper: GitHelper, gitSetting: TokenSetting): Boolean {
         return gitHelper.connect(gitSetting.privateToken!!)
     }
 

@@ -3,9 +3,9 @@ package com.itangcent.idea.plugin.dialog
 import com.google.inject.Inject
 import com.intellij.openapi.ui.Messages
 import com.intellij.util.containers.stream
-import com.itangcent.idea.plugin.config.ActionContext
+import com.itangcent.idea.plugin.context.ActionContext
 import com.itangcent.idea.plugin.extend.guice.PostConstruct
-import com.itangcent.idea.plugin.setting.GitSetting
+import com.itangcent.idea.plugin.setting.TokenSetting
 import com.itangcent.idea.plugin.setting.SettingManager
 import java.awt.event.*
 import javax.swing.*
@@ -22,7 +22,7 @@ class GitSettingDialog : JDialog() {
     private var remove_button: JButton? = null
     private var hosts: MutableList<String?>? = null
 
-    private var selectedGitSetting: GitSetting? = null
+    private var selectedGitSetting: TokenSetting? = null
 
     @Inject
     public val settingManager: SettingManager? = null
@@ -67,7 +67,7 @@ class GitSettingDialog : JDialog() {
     }
 
     private fun refreshHost() {
-        val settings = settingManager!!.gitSettings
+        val settings = settingManager!!.tokenSettings
         hosts = settings.stream()
                 .map { setting -> setting.host }
                 .toList()
@@ -88,7 +88,7 @@ class GitSettingDialog : JDialog() {
             token_textArea!!.text = "private token"
         } else {
             val host = hosts!![index]
-            selectedGitSetting = settingManager!!.getGitSetting(host)
+            selectedGitSetting = settingManager!!.getSetting(host)
 
             host_textField!!.text = host
             token_textArea!!.text = selectedGitSetting!!.privateToken
@@ -123,7 +123,7 @@ class GitSettingDialog : JDialog() {
             settingManager!!.saveGitSetting(selectedGitSetting!!)
         }
 
-        val gitSetting = GitSetting()
+        val gitSetting = TokenSetting()
         gitSetting.host = host
         gitSetting.privateToken = token
         settingManager!!.saveGitSetting(gitSetting)
@@ -144,7 +144,6 @@ class GitSettingDialog : JDialog() {
     }
 
     private fun onCancel() {
-        // add your code here if necessary
         dispose()
         actionContext!!.unHold()
     }
