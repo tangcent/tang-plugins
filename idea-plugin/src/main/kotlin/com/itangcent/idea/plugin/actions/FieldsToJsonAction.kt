@@ -36,7 +36,7 @@ class FieldsToJsonAction : InitAnAction("To Json") {
             if (editor != null) {
                 val fieldJsonGenerator = FieldJsonGenerator()
                 //region 委托actionContext在UI线程执行---------------------------------
-                actionContext.runInWriteUi {
+                actionContext.runInWriteUI {
                     val generateFieldJson = fieldJsonGenerator.generateFieldJson()
                     ToolUtils.copy2Clipboard(generateFieldJson)
                     logger!!.log("\n$generateFieldJson\n")

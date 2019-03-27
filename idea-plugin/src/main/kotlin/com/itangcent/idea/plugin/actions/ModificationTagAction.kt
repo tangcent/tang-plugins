@@ -18,16 +18,16 @@ import java.util.*
  */
 class ModificationTagAction : InitAnAction("Modification Tag") {
     override fun actionPerformed(actionContext: ActionContext, project: Project?, anActionEvent: AnActionEvent) {
-        actionContext.runInSwingUi {
+        actionContext.runInSwingUI {
             val modification = Messages.showInputDialog(project, "Input Modification Tag", "New Modification Tag", Messages.getQuestionIcon())
-                    ?: return@runInSwingUi
+                    ?: return@runInSwingUI
             actionContext.runAsync {
                 try {
                     val editor = anActionEvent.getData(PlatformDataKeys.EDITOR) ?: return@runAsync
                     val document = editor.document
                     val lineCount = document.lineCount
                     //region 委托actionContext在UI线程执行-------------------------------------
-                    actionContext.runInWriteUi {
+                    actionContext.runInWriteUI {
                         var classStartLine = -1
                         for (line in 0 until lineCount) {
                             val lineText = DocumentUtils.getLineText(document, line)

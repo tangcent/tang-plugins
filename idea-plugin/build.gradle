@@ -17,7 +17,8 @@ sourceCompatibility = 1.8
 
 intellij {
 //    version idea_version
-    version '2018.2.1'
+//    version '2018.2.1'
+    version '2017.3.5'
 //    plugins 'git4idea'
     pluginName plugin_name
     updateSinceUntilBuild false

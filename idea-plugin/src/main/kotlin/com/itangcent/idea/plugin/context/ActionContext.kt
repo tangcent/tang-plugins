@@ -12,12 +12,13 @@ import com.itangcent.idea.plugin.extend.guice.KotlinModule
 import com.itangcent.idea.plugin.extend.guice.instance
 import com.itangcent.tang.common.concurrent.AQSCountLatch
 import com.itangcent.tang.common.concurrent.CountLatch
+import com.itangcent.tang.common.concurrent.ValueHolder
 import com.itangcent.tang.common.utils.IDUtils
 import com.itangcent.tang.common.utils.ThreadPoolUtils
 import java.awt.EventQueue
 import java.util.*
 import java.util.concurrent.ExecutorService
-import java.util.concurrent.locks.ReentrantLock
+import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.collections.ArrayList
 import kotlin.concurrent.withLock
 import kotlin.reflect.KClass
@@ -29,9 +30,9 @@ import kotlin.reflect.KClass
  */
 class ActionContext {
 
-    private val cache = HashMap<String, Any>()
+    private val cache = HashMap<String, Any?>()
 
-    private val lock = ReentrantLock()
+    private val lock = ReentrantReadWriteLock()
 
     private val id = IDUtils.shortUUID()
 
@@ -59,39 +60,32 @@ class ActionContext {
     }
 
     //region cache--------------------------------------------------------------
-    fun cache(name: String, bean: Any) {
-        lock.withLock { cache.put(cachePrefix + name, bean) }
+    fun cache(name: String, bean: Any?) {
+        lock.writeLock().withLock { cache.put(cachePrefix + name, bean) }
     }
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getCache(name: String): T? {
-        return lock.withLock { cache[cachePrefix + name] as T? }
-    }
-
-    val suppliers: HashMap<KClass<*>, (Any) -> Any?> = HashMap()
-    val suppliersCache: HashMap<Any, Any?> = HashMap()
-
-    @Suppress("UNCHECKED_CAST")
-    fun <T : Any> registerSupplier(cls: KClass<T>, supplier: (T) -> Any?) {
-        suppliers[cls] = { key -> supplier(key as T) }
+        return lock.readLock().withLock { cache[cachePrefix + name] as T? }
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> achieve(key: Any): T? {
-        if (suppliersCache.containsKey(key)) {
-            return suppliersCache[key] as T?
+    fun <T> cacheOrCompute(name: String, beanSupplier: () -> T?): T? {
+        lock.readLock().withLock {
+            if (cache.containsKey(cachePrefix + name)) {
+                return cache[cachePrefix + name] as T?
+            }
         }
-        val t = suppliers[key::class]?.let { it(key) } as T?
-        suppliersCache[key] = t
-        return t
-
+        val bean = beanSupplier()
+        lock.writeLock().withLock { cache.put(cachePrefix + name, bean) }
+        return bean
     }
     //endregion cache--------------------------------------------------------------
 
     //region event--------------------------------------------------------------
     @Suppress("UNCHECKED_CAST")
     fun on(name: String, event: Runnable) {
-        lock.withLock {
+        lock.writeLock().withLock {
             val key = eventPrefix + name
             val oldEvent: Runnable? = cache[key] as Runnable?
             if (oldEvent == null) {
@@ -107,7 +101,7 @@ class ActionContext {
 
     @Suppress("UNCHECKED_CAST")
     fun call(name: String) {
-        lock.withLock {
+        lock.readLock().withLock {
             val event = cache[eventPrefix + name] as Runnable?
             event?.run()
         }
@@ -117,7 +111,7 @@ class ActionContext {
     //region lock and run----------------------------------------------------------------
 
     //锁住缓存
-    fun lock(): Boolean = lock.withLock {
+    fun lock(): Boolean = lock.writeLock().withLock {
         return if (locked) {
             false
         } else {
@@ -161,7 +155,7 @@ class ActionContext {
         }
     }
 
-    fun runInSwingUi(runnable: () -> Unit) {
+    fun runInSwingUI(runnable: () -> Unit) {
         if (getFlag() == swingThreadFlag) {
             runnable()
         } else {
@@ -178,11 +172,30 @@ class ActionContext {
         }
     }
 
-    fun runInWriteUi(runnable: () -> Unit) {
+    fun <T> callInSwingUI(callable: () -> T?): T? {
+        if (getFlag() == swingThreadFlag) {
+            return callable()
+        } else {
+            countLatch.down()
+            val valueHolder: ValueHolder<T> = ValueHolder()
+            EventQueue.invokeLater {
+                try {
+                    ActionContext.setContext(this, swingThreadFlag)
+                    valueHolder.compute { callable() }
+                } finally {
+                    ActionContext.clearContext()
+                    countLatch.up()
+                }
+            }
+            return valueHolder.getData()
+        }
+    }
+
+    fun runInWriteUI(runnable: () -> Unit) {
         if (getFlag() == writeThreadFlag) {
             runnable()
         } else {
-            val project = this.getCache<Project>(CacheKey.PROJECT)
+            val project = this.instance(Project::class)
             countLatch.down()
             WriteCommandAction.runWriteCommandAction(project) {
                 try {
@@ -196,7 +209,27 @@ class ActionContext {
         }
     }
 
-    fun runInReadUi(runnable: () -> Unit) {
+    fun <T> callInWriteUI(callable: () -> T?): T? {
+        if (getFlag() == writeThreadFlag) {
+            return callable()
+        } else {
+            val project = this.instance(Project::class)
+            countLatch.down()
+            val valueHolder: ValueHolder<T> = ValueHolder()
+            WriteCommandAction.runWriteCommandAction(project) {
+                try {
+                    ActionContext.setContext(this, writeThreadFlag)
+                    valueHolder.compute { callable() }
+                } finally {
+                    ActionContext.clearContext()
+                    countLatch.up()
+                }
+            }
+            return valueHolder.getData()
+        }
+    }
+
+    fun runInReadUI(runnable: () -> Unit) {
 
         if (getFlag() == readThreadFlag) {
             runnable()
@@ -214,6 +247,25 @@ class ActionContext {
         }
     }
 
+    fun <T> callInReadUI(callable: () -> T?): T? {
+        if (getFlag() == readThreadFlag) {
+            return callable()
+        } else {
+            countLatch.down()
+            val valueHolder: ValueHolder<T> = ValueHolder()
+            ReadAction.run<Throwable> {
+                try {
+                    ActionContext.setContext(this, readThreadFlag)
+                    valueHolder.compute { callable() }
+                } finally {
+                    ActionContext.clearContext()
+                    countLatch.up()
+                }
+            }
+            return valueHolder.getData()
+        }
+    }
+
     /**
      * 等待完成
      * warning:调用waitComplete*方法将清除当前线程绑定的ActionContext
@@ -223,7 +275,7 @@ class ActionContext {
         ActionContext.clearContext()
         this.countLatch.waitFor()
         this.call(CacheKey.ONCOMPLETED)
-        lock.withLock {
+        lock.writeLock().withLock {
             this.cache.clear()
             locked = false
         }
@@ -239,7 +291,7 @@ class ActionContext {
         executorService.submit {
             this.countLatch.waitFor()
             this.call(CacheKey.ONCOMPLETED)
-            lock.withLock {
+            lock.writeLock().withLock {
                 this.cache.clear()
                 locked = false
             }
@@ -381,6 +433,10 @@ class ActionContext {
             moduleActions.add(arrayOf<Any>(BIND_INSTANCE, instance!!))
         }
 
+        override fun <T : Any> bindInstance(cls: KClass<T>, instance: T) {
+            moduleActions.add(arrayOf<Any>(BIND_INSTANCE_WITH_CLASS, cls, instance))
+        }
+
         private val appendModules: MutableList<Module> = ArrayList()
         private val moduleActions: MutableList<Array<Any>> = ArrayList()
 
@@ -397,17 +453,19 @@ class ActionContext {
         }
 
         companion object {
-            val BIND_WITH_ANNOTATION_TYPE = "bindWithAnnotationType"
-            val BIND_WITH_ANNOTATION = "bindWithAnnotation"
-            val BIND = "bind"
-            val BIND_WITH_NAME = "bindWithName"
-            val BIND_INSTANCE = "bindInstance"
-            val BIND_INSTANCE_WITH_NAME = "bindInstanceWithName"
+            const val BIND_WITH_ANNOTATION_TYPE = "bindWithAnnotationType"
+            const val BIND_WITH_ANNOTATION = "bindWithAnnotation"
+            const val BIND = "bind"
+            const val BIND_WITH_NAME = "bindWithName"
+            const val BIND_INSTANCE = "bindInstance"
+            const val BIND_INSTANCE_WITH_CLASS = "bindInstanceWithClass"
+            const val BIND_INSTANCE_WITH_NAME = "bindInstanceWithName"
         }
     }
 
     class ConfiguredModule(private val moduleActions: MutableList<Array<Any>> = ArrayList()) : KotlinModule() {
 
+        @Suppress("UNCHECKED_CAST")
         override fun configure() {
             super.configure()
             for (moduleAction in moduleActions) {
@@ -433,6 +491,9 @@ class ActionContext {
                     ActionContextBuilder.BIND_INSTANCE -> {
                         bindInstance(moduleAction[1])
                     }
+                    ActionContextBuilder.BIND_INSTANCE_WITH_CLASS -> {
+                        bindInstance(moduleAction[1] as KClass<Any>, moduleAction[2])
+                    }
                     ActionContextBuilder.BIND -> {
                         (moduleAction[2] as ((LinkedBindingBuilder<*>) -> Unit)).invoke(
                                 bind(moduleAction[1] as KClass<*>)
@@ -455,6 +516,7 @@ class ActionContext {
         fun <T> bindInstance(instance: T)
 
         fun <T : Any> bind(type: KClass<T>, callBack: (LinkedBindingBuilder<T>) -> Unit)
+        fun <T : Any> bindInstance(cls: KClass<T>, instance: T)
     }
 
 }

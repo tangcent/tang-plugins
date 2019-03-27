@@ -34,7 +34,7 @@ abstract class ApiExportAction(text: String) : InitAnAction(text) {
         if (info == null) return
         val actionContext = ActionContext.getContext()!!
 
-        actionContext.runInSwingUi {
+        actionContext.runInSwingUI {
             val descriptor = FileChooserDescriptorFactory
                     .createSingleFileOrFolderDescriptor()
                     .withTitle("Export location")
@@ -49,7 +49,7 @@ abstract class ApiExportAction(text: String) : InitAnAction(text) {
             }
             val files = chooser.choose(project, toSelect)
             if (files.isNotEmpty()) {
-                actionContext.runInWriteUi {
+                actionContext.runInWriteUI {
                     val file = files[0]
                     PropertiesComponent.getInstance().setValue(lastImportedLocation(), file.path)
                     if (file.isDirectory) {

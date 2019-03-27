@@ -44,7 +44,7 @@ class ConsoleRunnerLogger : AbstractLogger() {
                 if (logConsoleRunner == null) {
                     val project = actionContext!!.getCache<Project>(CacheKey.PROJECT)
                     if (project == null) {
-                        actionContext.runInWriteUi { Messages.showMessageDialog(project, "project loss!", Messages.getInformationIcon()) }
+                        actionContext.runInWriteUI { Messages.showMessageDialog(project, "project loss!", Messages.getInformationIcon()) }
                     } else {
                         try {
                             val baseDir = project.baseDir
@@ -55,7 +55,7 @@ class ConsoleRunnerLogger : AbstractLogger() {
                             }
                             logConsoleRunner!!.initAndRun()
                         } catch (ex: ExecutionException) {
-                            actionContext.runInWriteUi {
+                            actionContext.runInWriteUI {
                                 Messages.showMessageDialog(project, "Error at:" + ex.message
                                         + "trace:" + ExceptionUtils.getStackTrace(ex),
                                         "Error", Messages.getInformationIcon())

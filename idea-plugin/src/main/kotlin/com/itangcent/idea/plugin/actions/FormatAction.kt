@@ -24,7 +24,7 @@ class FormatAction : InitAnAction() {
             formatterList.add(RegionFormatter(80))
             //to use other formatters
             //region 委托actionContext在UI线程执行---------------------------------
-            actionContext.runInWriteUi {
+            actionContext.runInWriteUI {
                 for (line in 0 until lineCount) {
                     for (formatter in formatterList) {
                         formatter.format(document, line)

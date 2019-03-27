@@ -4,16 +4,14 @@ import com.intellij.ide.projectView.impl.nodes.ClassTreeNode
 import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
-import com.intellij.openapi.editor.Editor
 import com.intellij.openapi.project.Project
-import com.intellij.pom.Navigatable
 import com.intellij.psi.PsiClass
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiFile
 import com.intellij.psi.util.PsiTreeUtil
-import com.itangcent.idea.plugin.context.ActionContext
 import com.itangcent.idea.plugin.constant.CacheKey
+import com.itangcent.idea.plugin.context.ActionContext
 import org.apache.commons.lang.StringUtils
 
 /**
@@ -22,14 +20,21 @@ import org.apache.commons.lang.StringUtils
 object ActionUtils {
 
     fun findCurrentPath(): String? {
-        val psiFile = ActionContext.getContext()!!.achieve<PsiFile>(CommonDataKeys.PSI_FILE)
+        val actionContext = ActionContext.getContext()!!
+        val psiFile = actionContext.cacheOrCompute(CommonDataKeys.PSI_FILE.name) {
+            actionContext.callInReadUI { actionContext.instance(AnActionEvent::class).getData(CommonDataKeys.PSI_FILE) }
+        }
         if (psiFile != null) return findCurrentPath(psiFile)
 
-        val navigatable = ActionContext.getContext()!!.achieve<Navigatable>(CommonDataKeys.NAVIGATABLE)
+        val navigatable = actionContext.cacheOrCompute(CommonDataKeys.NAVIGATABLE.name) {
+            actionContext.callInReadUI { actionContext.instance(AnActionEvent::class).getData(CommonDataKeys.NAVIGATABLE) }
+        }
         if (navigatable != null && navigatable is PsiDirectory) {//select dir
             return findCurrentPath(navigatable)
         }
-        val navigatables = ActionContext.getContext()!!.achieve<Array<Navigatable>>(CommonDataKeys.NAVIGATABLE_ARRAY)
+        val navigatables = actionContext.cacheOrCompute(CommonDataKeys.NAVIGATABLE_ARRAY.name) {
+            actionContext.callInReadUI { actionContext.instance(AnActionEvent::class).getData(CommonDataKeys.NAVIGATABLE_ARRAY) }
+        }
         if (navigatables != null) {//select mult dir
             for (node in navigatables) {
                 when (navigatable) {
@@ -69,8 +74,12 @@ object ActionUtils {
 
     fun findCurrentClass(): PsiClass? {
         val actionContext = ActionContext.getContext()!!
-        val editor = actionContext.achieve<Editor>(CommonDataKeys.EDITOR) ?: return null
-        val psiFile = actionContext.achieve<PsiFile>(CommonDataKeys.PSI_FILE) ?: return null
+        val editor = actionContext.cacheOrCompute(CommonDataKeys.EDITOR.name) {
+            actionContext.callInReadUI { actionContext.instance(AnActionEvent::class).getData(CommonDataKeys.EDITOR) }
+        } ?: return null
+        val psiFile = actionContext.cacheOrCompute(CommonDataKeys.PSI_FILE.name) {
+            actionContext.callInReadUI { actionContext.instance(AnActionEvent::class).getData(CommonDataKeys.PSI_FILE) }
+        } ?: return null
         var referenceAt = psiFile.findElementAt(editor.caretModel.offset)
         var cls: PsiClass? = null
         try {

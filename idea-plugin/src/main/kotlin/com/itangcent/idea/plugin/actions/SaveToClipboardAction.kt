@@ -16,7 +16,7 @@ class SaveToClipboardAction : InitAnAction("Save to clipboard") {
 
     override fun actionPerformed(actionContext: ActionContext, project: Project?, anActionEvent: AnActionEvent) {
 
-        actionContext.runInReadUi {
+        actionContext.runInReadUI {
             val editor = anActionEvent.getData(PlatformDataKeys.EDITOR)
 
             if (editor != null) {

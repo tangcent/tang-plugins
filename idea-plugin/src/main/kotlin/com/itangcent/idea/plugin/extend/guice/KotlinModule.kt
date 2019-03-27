@@ -125,6 +125,11 @@ open class KotlinModule : AbstractModule() {
         bind(aClass).toInstance(instance)
     }
 
+    @Suppress("UNCHECKED_CAST")
+    protected fun <T : Any> bindInstance(cls: KClass<T>, instance: T) {
+        bind(cls).toInstance(instance)
+    }
+
     override fun configure() {
 
         bindMethodHandler(PostConstruct::class.java, object : MethodHandler<Any?, Annotation> {

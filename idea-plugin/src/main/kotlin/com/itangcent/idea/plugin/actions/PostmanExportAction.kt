@@ -34,10 +34,10 @@ class PostmanExportAction : ApiExportAction("Export Postman") {
 
         val logger: Logger? = actionContext.instance(Logger::class)
 
-        actionContext.runInReadUi {
+        actionContext.runInReadUI {
             try {
                 logger!!.info("Start find apis...")
-                val exportedPostman = actionContext.instance(PostmanExporter::class).export(anActionEvent)
+                val exportedPostman = actionContext.instance(PostmanExporter::class).export()
                 if (exportedPostman == null) {
                     logger.info("No api be found to export!")
                 } else {

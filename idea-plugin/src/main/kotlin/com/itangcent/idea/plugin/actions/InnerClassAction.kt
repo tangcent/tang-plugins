@@ -16,10 +16,10 @@ import org.apache.commons.lang.StringUtils
  */
 class InnerClassAction : InitAnAction("Inner Class") {
     override fun actionPerformed(actionContext: ActionContext, project: Project?, anActionEvent: AnActionEvent) {
-        actionContext.runInSwingUi {
+        actionContext.runInSwingUI {
             val className = Messages.showInputDialog(project, "Input Class Name", "New Inner Class", Messages.getQuestionIcon())
-                    ?: return@runInSwingUi
-            actionContext.runInWriteUi {
+                    ?: return@runInSwingUI
+            actionContext.runInWriteUI {
                 try {
                     val editor = anActionEvent.getData(PlatformDataKeys.EDITOR)
                     val document: Document

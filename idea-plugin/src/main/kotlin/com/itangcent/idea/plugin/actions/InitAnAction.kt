@@ -2,7 +2,6 @@ package com.itangcent.idea.plugin.actions
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.DataKey
 import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.diagnostic.Logger
 import com.intellij.openapi.project.Project
@@ -12,7 +11,6 @@ import com.itangcent.idea.plugin.context.ActionContext
 import com.itangcent.idea.plugin.extend.guice.singleton
 import com.itangcent.idea.plugin.extend.guice.with
 import com.itangcent.idea.plugin.logger.ConsoleRunnerLogger
-import com.itangcent.tang.common.concurrent.ValueHolder
 import com.itangcent.tang.common.exception.ProcessCanceledException
 import org.apache.commons.lang3.exception.ExceptionUtils
 import javax.swing.Icon
@@ -37,7 +35,7 @@ abstract class InitAnAction : AnAction {
 
         val actionContextBuilder = ActionContext.builder()
         onBuildActionContext(actionContextBuilder)
-        actionContextBuilder.bindInstance(project)
+        actionContextBuilder.bindInstance(Project::class, project)
         actionContextBuilder.bindInstance(anActionEvent)
         val actionContext = actionContextBuilder.build()
         actionContext.init(this)
@@ -46,19 +44,19 @@ abstract class InitAnAction : AnAction {
 
         if (actionContext.lock()) {
             actionContext.cache(CacheKey.PROJECT, project)
-            actionContext.registerSupplier(DataKey::class, { key ->
-                val valueHolder: ValueHolder<Any> = ValueHolder()
-                actionContext.runInReadUi {
-                    valueHolder.data = anActionEvent.getData(key)
-                }
-                return@registerSupplier valueHolder.data
-            })
+//            actionContext.registerSupplier(DataKey::class) { key ->
+//                val valueHolder: ValueHolder<Any> = ValueHolder()
+//                actionContext.runInReadUI {
+//                    valueHolder.compute { anActionEvent.getData(key) }
+//                }
+//                return@registerSupplier valueHolder.getData()
+//            }
             actionContext.runAsync {
                 try {
                     actionPerformed(actionContext, project, anActionEvent)
                 } catch (ex: Exception) {
                     log.info("Error:${ex.message}trace:${ExceptionUtils.getStackTrace(ex)}")
-                    actionContext.runInWriteUi {
+                    actionContext.runInWriteUI {
                         Messages.showMessageDialog(project, when (ex) {
                             is ProcessCanceledException -> ex.stopMsg
                             else -> "Error at:${ex.message}trace:${ExceptionUtils.getStackTrace(ex)}"
@@ -68,7 +66,7 @@ abstract class InitAnAction : AnAction {
             }
         } else {
             log.info("Found unfinished task!")
-            actionContext.runInWriteUi {
+            actionContext.runInWriteUI {
                 Messages.showMessageDialog(project, "Found unfinished task! ",
                         "Error", Messages.getInformationIcon())
             }

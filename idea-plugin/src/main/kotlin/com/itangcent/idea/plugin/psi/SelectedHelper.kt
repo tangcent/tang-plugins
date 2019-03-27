@@ -2,6 +2,7 @@ package com.itangcent.idea.plugin.psi
 
 import com.intellij.ide.projectView.impl.nodes.ClassTreeNode
 import com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode
+import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.pom.Navigatable
 import com.intellij.psi.PsiClass
@@ -64,29 +65,35 @@ object SelectedHelper {
                 }
                 onCompleted?.invoke()
             }
-            actionContext.runInReadUi {
+            actionContext.runInReadUI {
                 try {
-                    val psiFile = ActionContext.getContext()!!.achieve<PsiFile>(CommonDataKeys.PSI_FILE)
+                    val psiFile = actionContext.cacheOrCompute(CommonDataKeys.PSI_FILE.name) {
+                        actionContext.instance(AnActionEvent::class).getData(CommonDataKeys.PSI_FILE)
+                    }
                     if (psiFile != null) {
                         onFile(psiFile)
-                        return@runInReadUi
+                        return@runInReadUI
                     }
                 } catch (e: Exception) {
                     logger.warn("error handle class")
                 }
 
                 try {
-                    val navigatable = actionContext.achieve<Navigatable>(CommonDataKeys.NAVIGATABLE)
+                    val navigatable = actionContext.cacheOrCompute(CommonDataKeys.NAVIGATABLE.name) {
+                        actionContext.instance(AnActionEvent::class).getData(CommonDataKeys.NAVIGATABLE)
+                    }
                     if (navigatable != null) {
                         onNavigatable(navigatable)
-                        return@runInReadUi
+                        return@runInReadUI
                     }
                 } catch (e: Exception) {
                     logger.warn("error handle navigatable")
                 }
 
                 try {
-                    val navigatables = actionContext.achieve<Array<Navigatable>>(CommonDataKeys.NAVIGATABLE_ARRAY)
+                    val navigatables = actionContext.cacheOrCompute(CommonDataKeys.NAVIGATABLE_ARRAY.name) {
+                        actionContext.instance(AnActionEvent::class).getData(CommonDataKeys.NAVIGATABLE_ARRAY)
+                    }
                     if (navigatables != null && navigatables.isNotEmpty()) {
                         try {
                             for (navigatable in navigatables) {
@@ -96,7 +103,7 @@ object SelectedHelper {
                         } finally {
                             aqsCount.up()
                         }
-                        return@runInReadUi
+                        return@runInReadUI
                     }
                 } catch (e: Exception) {
                     logger.warn("error handle navigatables")
@@ -128,7 +135,7 @@ object SelectedHelper {
             try {
                 if (fileHandle != null) fileHandle!!(psiFile)
                 if (classHandle != null && psiFile is PsiClassOwner) {
-                    actionContext.runInReadUi {
+                    actionContext.runInReadUI {
                         for (psiCls in psiFile.classes) {
                             classHandle!!(psiCls)
                         }
@@ -151,7 +158,7 @@ object SelectedHelper {
         private fun onDirectory(psiDirectory: PsiDirectory) {
             if (dirHandle == null) {
                 try {
-                    actionContext.runInReadUi {
+                    actionContext.runInReadUI {
                         SelectedHelper.traversal(psiDirectory, { true }, {
                             aqsCount.down()
                             onFile(it)
@@ -163,7 +170,7 @@ object SelectedHelper {
             } else {
                 dirHandle!!(psiDirectory, {
                     if (it) {
-                        actionContext.runInReadUi {
+                        actionContext.runInReadUI {
                             try {
                                 SelectedHelper.traversal(psiDirectory, { true }, {
                                     aqsCount.down()

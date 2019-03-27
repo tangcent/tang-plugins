@@ -1,5 +1,6 @@
 package com.itangcent.idea.plugin.api.export.postman
 
+import com.google.inject.Inject
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.psi.*
@@ -19,9 +20,12 @@ import java.util.function.Consumer
 
 class PostmanExporter : ApiExporter() {
 
-    fun export(anActionEvent: AnActionEvent): HashMap<String, Any?>? {
+    @Inject
+    var anActionEvent: AnActionEvent? = null
 
-        val navigatable = anActionEvent.dataContext.getData(CommonDataKeys.NAVIGATABLE)
+    fun export(): HashMap<String, Any?>? {
+
+        val navigatable = anActionEvent!!.getData(CommonDataKeys.NAVIGATABLE)
         if (navigatable is PsiDirectory) {//select dir
             val itemsMap: HashMap<String, ArrayList<HashMap<String, Any?>>?> = HashMap()
             traversal(navigatable, {
@@ -172,7 +176,7 @@ class PostmanExporter : ApiExporter() {
 
         val item: HashMap<String, Any?> = HashMap()
 
-        var attr:String? = null
+        var attr: String? = null
         val attrOfMethod = findAttrOfMethod(method)!!
         if (attrOfMethod.contains("\n")) {//multi line
             val lines = attrOfMethod.lines()

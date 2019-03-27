@@ -33,7 +33,7 @@ class FieldsGenerateAction : InitAnAction("Generate Fields") {
         if (editor != null) {
             val fieldGenerator = FieldGenerator()
             //region 委托actionContext在UI线程执行---------------------------------
-            actionContext.runInWriteUi {
+            actionContext.runInWriteUI {
                 try {
                     fieldGenerator.generateFields(anActionEvent)
                 } catch (e: Exception) {
