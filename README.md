@@ -24,5 +24,3 @@
 ## keyboard-shortcut
 -  (alt S):Save selected text to clipboard
 -  (ctrl alt S)/(command alt S):open clipboard
-
-## actions
