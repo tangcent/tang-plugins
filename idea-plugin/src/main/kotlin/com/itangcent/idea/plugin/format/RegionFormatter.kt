@@ -2,7 +2,7 @@ package com.itangcent.idea.plugin.format
 
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.util.TextRange
-import com.itangcent.tang.common.utils.StringUtils
+import com.itangcent.common.utils.StringUtils
 import java.util.*
 
 /**

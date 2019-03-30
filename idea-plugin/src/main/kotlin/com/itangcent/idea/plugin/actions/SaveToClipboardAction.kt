@@ -5,12 +5,13 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.project.Project
 import com.itangcent.idea.plugin.clipboard.ClipboardData
 import com.itangcent.idea.plugin.clipboard.ThrottleClipboardManager
-import com.itangcent.idea.plugin.context.ActionContext
-import com.itangcent.idea.plugin.logger.Logger
+import com.itangcent.intellij.actions.KotlinAnAction
+import com.itangcent.intellij.context.ActionContext
+import com.itangcent.intellij.logger.Logger
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.exception.ExceptionUtils
 
-class SaveToClipboardAction : InitAnAction("Save to clipboard") {
+class SaveToClipboardAction : KotlinAnAction("Save to clipboard") {
 
     private val clipboardManager: ThrottleClipboardManager = ThrottleClipboardManager(ActionContext.local())
 

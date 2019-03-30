@@ -2,9 +2,9 @@ package com.itangcent.idea.plugin.git
 
 import com.google.inject.Inject
 import com.itangcent.idea.plugin.auth.AuthProvider
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.idea.plugin.setting.TokenSetting
-import com.itangcent.idea.plugin.setting.SettingManager
+import com.itangcent.intellij.logger.Logger
+import com.itangcent.intellij.setting.SettingManager
+import com.itangcent.intellij.setting.TokenSetting
 import org.apache.commons.lang3.exception.ExceptionUtils
 
 class GitHelperConnector {

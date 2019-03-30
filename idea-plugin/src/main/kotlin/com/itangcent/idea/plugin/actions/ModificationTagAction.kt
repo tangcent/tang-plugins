@@ -4,10 +4,11 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
-import com.itangcent.idea.plugin.context.ActionContext
-import com.itangcent.idea.plugin.util.ActionUtils
-import com.itangcent.idea.plugin.util.DocumentUtils
-import com.itangcent.tang.common.utils.SystemUtils
+import com.itangcent.intellij.context.ActionContext
+import com.itangcent.common.utils.SystemUtils
+import com.itangcent.intellij.actions.KotlinAnAction
+import com.itangcent.intellij.util.ActionUtils
+import com.itangcent.intellij.util.DocumentUtils
 import org.apache.commons.lang.StringUtils
 import org.apache.commons.lang.time.DateFormatUtils
 import java.util.*
@@ -16,7 +17,7 @@ import java.util.*
  *
  * @author TomNg
  */
-class ModificationTagAction : InitAnAction("Modification Tag") {
+class ModificationTagAction : KotlinAnAction("Modification Tag") {
     override fun actionPerformed(actionContext: ActionContext, project: Project?, anActionEvent: AnActionEvent) {
         actionContext.runInSwingUI {
             val modification = Messages.showInputDialog(project, "Input Modification Tag", "New Modification Tag", Messages.getQuestionIcon())

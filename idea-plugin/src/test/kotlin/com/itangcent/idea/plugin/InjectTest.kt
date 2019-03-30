@@ -1,6 +1,6 @@
 package com.itangcent.idea.plugin
 
-import com.itangcent.tang.common.utils.GsonUtils
+import com.itangcent.common.utils.GsonUtils
 import java.util.*
 
 fun main(args: Array<String>) {

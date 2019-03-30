@@ -5,26 +5,29 @@ import com.intellij.lang.jvm.JvmModifier
 import com.intellij.psi.*
 import com.intellij.psi.util.PsiTypesUtil
 import com.intellij.util.containers.isNullOrEmpty
-import com.itangcent.idea.plugin.fields.KV
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.idea.plugin.psi.JsonOption
-import com.itangcent.idea.plugin.psi.PsiAnnotationUtils
-import com.itangcent.idea.plugin.psi.PsiClassHelper
-import com.itangcent.idea.plugin.psi.PsiClassUtils
-import com.itangcent.idea.plugin.spring.SpringClassName
-import com.itangcent.idea.plugin.util.ActionUtils
-import com.itangcent.idea.plugin.util.DocCommentUtils
+import com.itangcent.intellij.logger.Logger
+import com.itangcent.intellij.psi.JsonOption
+import com.itangcent.intellij.psi.PsiAnnotationUtils
+import com.itangcent.intellij.psi.PsiClassHelper
+import com.itangcent.intellij.psi.PsiClassUtils
+import com.itangcent.intellij.spring.SpringClassName
+import com.itangcent.intellij.util.ActionUtils
+import com.itangcent.intellij.util.DocCommentUtils
+import com.itangcent.intellij.util.KV
 import org.apache.commons.lang3.StringUtils
 import java.util.*
 import java.util.function.Consumer
 import java.util.regex.Pattern
 
 open class ApiExporter {
-    @Inject protected val logger: Logger? = null
+    @Inject
+    protected val logger: Logger? = null
 
-    @Inject protected val psiClassHelper: PsiClassHelper? = null
+    @Inject
+    protected val psiClassHelper: PsiClassHelper? = null
 
-    @Inject protected val commonRules: CommonRules? = null
+    @Inject
+    protected val commonRules: CommonRules? = null
 
     protected fun isJavaFile(psiFile: PsiFile): Boolean {
         if (psiFile !is PsiJavaFile) return false
@@ -469,7 +472,8 @@ open class ApiExporter {
                 if (linkMethodOrProperty.isBlank()) {
                     sb.append(linkToClass(linkClass))
                 } else {
-                    val methodOrProperty = psiClassHelper.resolvePropertyOrMethodOfClass(linkClass, linkMethodOrProperty) ?: continue
+                    val methodOrProperty = psiClassHelper.resolvePropertyOrMethodOfClass(linkClass, linkMethodOrProperty)
+                            ?: continue
                     if (methodOrProperty is PsiMethod) {
                         sb.append(linkToMethod(methodOrProperty))
                     } else if (methodOrProperty is PsiField) {

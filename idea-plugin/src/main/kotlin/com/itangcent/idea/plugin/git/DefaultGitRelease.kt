@@ -1,12 +1,12 @@
 package com.itangcent.idea.plugin.git
 
 import com.google.inject.Inject
+import com.itangcent.common.utils.DateUtils
+import com.itangcent.common.utils.GsonUtils
 import com.itangcent.idea.plugin.auth.AuthProvider
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.idea.plugin.setting.TokenSetting
-import com.itangcent.idea.plugin.setting.SettingManager
-import com.itangcent.tang.common.utils.DateUtils
-import com.itangcent.tang.common.utils.GsonUtils
+import com.itangcent.intellij.logger.Logger
+import com.itangcent.intellij.setting.SettingManager
+import com.itangcent.intellij.setting.TokenSetting
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.gitlab4j.api.GitLabApi

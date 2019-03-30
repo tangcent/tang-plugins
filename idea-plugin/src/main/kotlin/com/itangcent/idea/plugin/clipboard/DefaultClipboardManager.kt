@@ -3,10 +3,10 @@ package com.itangcent.idea.plugin.clipboard
 import com.google.common.cache.CacheBuilder
 import com.google.common.cache.CacheLoader
 import com.google.inject.Inject
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.tang.common.utils.GsonUtils
-import com.itangcent.tang.common.utils.IDUtils
-import com.itangcent.tang.common.utils.SystemUtils
+import com.itangcent.common.utils.GsonUtils
+import com.itangcent.common.utils.IDUtils
+import com.itangcent.common.utils.SystemUtils
+import com.itangcent.intellij.logger.Logger
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.exception.ExceptionUtils
@@ -106,7 +106,7 @@ class DefaultClipboardManager : ClipboardManager {
 
         if (!file.exists()) {
             try {
-                FileUtils.forceMkdirParent(file)
+                org.apache.commons.io.FileUtils.forceMkdirParent(file)
                 if (!file.createNewFile()) {
                     logger!!.error("error to create new setting file")
                 }
@@ -123,7 +123,7 @@ class DefaultClipboardManager : ClipboardManager {
     }
 
     private fun getContentFromFile(id: String): String? {
-        return com.itangcent.tang.common.utils.FileUtils.read(getContentFile(id))
+        return com.itangcent.common.utils.FileUtils.read(getContentFile(id))
     }
 
     override fun saveData(clipboardData: ClipboardData) {
@@ -190,15 +190,15 @@ class DefaultClipboardManager : ClipboardManager {
     }
 
     private fun updateIndexesFile() {
-        com.itangcent.tang.common.utils.FileUtils.write(indexesFile, GsonUtils.toJson(this.indexes))
+        com.itangcent.common.utils.FileUtils.write(indexesFile, GsonUtils.toJson(this.indexes))
     }
 
     private fun saveContent(clipboardData: ClipboardData) {
-        com.itangcent.tang.common.utils.FileUtils.write(getContentFile(clipboardData.id!!), clipboardData.content!!)
+        com.itangcent.common.utils.FileUtils.write(getContentFile(clipboardData.id!!), clipboardData.content!!)
     }
 
     fun saveContent(id: String, content: String) {
-        com.itangcent.tang.common.utils.FileUtils.write(getContentFile(id), content)
+        com.itangcent.common.utils.FileUtils.write(getContentFile(id), content)
     }
 
     override fun deleteData(id: String) {
@@ -208,7 +208,7 @@ class DefaultClipboardManager : ClipboardManager {
         this.indexes.indexes = clipboardDatas
         updateIndexesFile()
 
-        com.itangcent.tang.common.utils.FileUtils.remove(getContentFile(id))
+        com.itangcent.common.utils.FileUtils.remove(getContentFile(id))
     }
 
 }

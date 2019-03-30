@@ -3,16 +3,17 @@ package com.itangcent.idea.plugin.actions
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.project.Project
-import com.itangcent.idea.plugin.context.ActionContext
 import com.itangcent.idea.plugin.format.Formatter
 import com.itangcent.idea.plugin.format.RegionFormatter
-import com.itangcent.idea.plugin.util.ActionUtils
+import com.itangcent.intellij.actions.KotlinAnAction
+import com.itangcent.intellij.context.ActionContext
+import com.itangcent.intellij.util.ActionUtils
 import java.util.*
 
 /**
  * @author TomNg
  */
-class FormatAction : InitAnAction() {
+class FormatAction : KotlinAnAction() {
     override fun actionPerformed(actionContext: ActionContext, project: Project?, anActionEvent: AnActionEvent) {
 
         val editor = anActionEvent.getData(PlatformDataKeys.EDITOR)

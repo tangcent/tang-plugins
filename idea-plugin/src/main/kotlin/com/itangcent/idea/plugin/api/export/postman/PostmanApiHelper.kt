@@ -1,10 +1,10 @@
 package com.itangcent.idea.plugin.api.export.postman
 
 import com.google.inject.Inject
+import com.itangcent.common.utils.GsonUtils
 import com.itangcent.idea.plugin.api.export.TMResponseHandler
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.idea.plugin.setting.SettingManager
-import com.itangcent.tang.common.utils.GsonUtils
+import com.itangcent.intellij.logger.Logger
+import com.itangcent.intellij.setting.SettingManager
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.apache.http.client.methods.HttpPost

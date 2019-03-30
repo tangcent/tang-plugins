@@ -4,11 +4,11 @@ import com.intellij.lang.jvm.JvmModifier
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.util.containers.stream
-import com.itangcent.idea.plugin.psi.PsiClassHelper.Companion.jvmFieldModifiers
-import com.itangcent.idea.plugin.util.ActionUtils
-import com.itangcent.idea.plugin.util.DocumentUtils
-import com.itangcent.idea.plugin.util.FieldUtils
-import com.itangcent.tang.common.utils.CollectionUtils
+import com.itangcent.common.utils.CollectionUtils
+import com.itangcent.intellij.psi.PsiClassHelper.Companion.jvmFieldModifiers
+import com.itangcent.intellij.util.ActionUtils
+import com.itangcent.intellij.util.DocumentUtils
+import com.itangcent.intellij.util.FieldUtils
 import java.io.IOException
 
 class FieldGenerator : BasedFieldGenerator() {

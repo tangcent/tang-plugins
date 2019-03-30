@@ -2,16 +2,16 @@ package com.itangcent.idea.plugin.project
 
 import com.google.common.collect.ImmutableMap
 import com.google.inject.Inject
-import com.itangcent.idea.plugin.context.ActionContext
+import com.itangcent.intellij.context.ActionContext
 import com.itangcent.idea.plugin.git.GitHelper
 import com.itangcent.idea.plugin.git.GitHelperConnector
 import com.itangcent.idea.plugin.git.GitUtils
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.tang.common.exception.ProcessCanceledException
-import com.itangcent.tang.common.files.FileFilter
-import com.itangcent.tang.common.files.FileHandle
-import com.itangcent.tang.common.utils.SystemUtils
-import com.itangcent.tang.common.files.DefaultFileTraveler
+import com.itangcent.intellij.logger.Logger
+import com.itangcent.common.exception.ProcessCanceledException
+import com.itangcent.common.files.DefaultFileTraveler
+import com.itangcent.common.files.FileFilter
+import com.itangcent.common.files.FileHandle
+import com.itangcent.common.utils.SystemUtils
 import org.apache.commons.lang3.ObjectUtils
 import java.util.*
 

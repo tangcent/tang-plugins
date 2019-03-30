@@ -5,16 +5,17 @@ import com.intellij.openapi.actionSystem.PlatformDataKeys
 import com.intellij.openapi.editor.Document
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
-import com.itangcent.idea.plugin.context.ActionContext
-import com.itangcent.idea.plugin.util.ActionUtils
-import com.itangcent.idea.plugin.util.DocumentUtils
-import com.itangcent.idea.plugin.util.EditorUtils
+import com.itangcent.intellij.actions.KotlinAnAction
+import com.itangcent.intellij.context.ActionContext
+import com.itangcent.intellij.util.ActionUtils
+import com.itangcent.intellij.util.DocumentUtils
+import com.itangcent.intellij.util.EditorUtils
 import org.apache.commons.lang.StringUtils
 
 /**
  * Created by TomNg on 2017/2/16.
  */
-class InnerClassAction : InitAnAction("Inner Class") {
+class InnerClassAction : KotlinAnAction("Inner Class") {
     override fun actionPerformed(actionContext: ActionContext, project: Project?, anActionEvent: AnActionEvent) {
         actionContext.runInSwingUI {
             val className = Messages.showInputDialog(project, "Input Class Name", "New Inner Class", Messages.getQuestionIcon())

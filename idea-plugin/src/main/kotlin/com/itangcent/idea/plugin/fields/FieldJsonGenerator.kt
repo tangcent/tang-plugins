@@ -1,9 +1,10 @@
 package com.itangcent.idea.plugin.fields
 
-import com.itangcent.idea.plugin.context.ActionContext
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.idea.plugin.psi.PsiClassHelper
-import com.itangcent.idea.plugin.util.ActionUtils
+import com.itangcent.common.utils.GsonUtils
+import com.itangcent.intellij.context.ActionContext
+import com.itangcent.intellij.logger.Logger
+import com.itangcent.intellij.psi.PsiClassHelper
+import com.itangcent.intellij.util.ActionUtils
 import java.io.IOException
 
 
@@ -26,7 +27,7 @@ class FieldJsonGenerator : BasedFieldGenerator() {
 //                .toList()
 
         val kv = ActionContext.getContext()!!.instance(PsiClassHelper::class).getFields(currentClass)
-        return kv.toPrettyJson()
+        return GsonUtils.prettyJson(kv)
 
     }
 }

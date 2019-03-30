@@ -3,7 +3,7 @@ package com.itangcent.idea.plugin
 import com.itangcent.idea.plugin.extend.rx.AutoComputer
 import com.itangcent.idea.plugin.extend.rx.consistent
 import com.itangcent.idea.plugin.extend.rx.from
-import com.itangcent.tang.common.utils.GsonUtils
+import com.itangcent.common.utils.GsonUtils
 import kotlin.reflect.KMutableProperty0
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties

@@ -1,8 +1,8 @@
 package com.itangcent.idea.plugin.git
 
 import com.google.inject.Inject
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.tang.common.shell.ShellUtils
+import com.itangcent.common.shell.ShellUtils
+import com.itangcent.intellij.logger.Logger
 import org.apache.commons.io.FileUtils
 import org.apache.commons.lang3.StringUtils
 import java.io.File

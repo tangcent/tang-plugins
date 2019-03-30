@@ -1,10 +1,10 @@
 package com.itangcent.idea.plugin.git
 
 import com.google.inject.Inject
+import com.itangcent.common.function.ResultHolder
 import com.itangcent.idea.plugin.dialog.ReleaseDialog
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.idea.plugin.util.UIUtils
-import com.itangcent.tang.common.function.ResultHolder
+import com.itangcent.intellij.logger.Logger
+import com.itangcent.intellij.util.UIUtils
 import org.apache.commons.lang.StringUtils
 import java.util.function.Function
 

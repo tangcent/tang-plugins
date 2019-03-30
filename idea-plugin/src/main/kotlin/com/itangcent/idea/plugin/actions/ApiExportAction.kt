@@ -7,16 +7,17 @@ import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.LocalFileSystem
 import com.intellij.openapi.vfs.VirtualFile
 import com.itangcent.idea.plugin.api.export.CommonRules
-import com.itangcent.idea.plugin.context.ActionContext
-import com.itangcent.idea.plugin.extend.guice.singleton
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.idea.plugin.psi.PsiClassHelper
-import com.itangcent.idea.plugin.psi.TmTypeHelper
-import com.itangcent.idea.plugin.util.FileUtils
-import com.itangcent.idea.plugin.util.ToolUtils
+import com.itangcent.intellij.actions.KotlinAnAction
+import com.itangcent.intellij.context.ActionContext
+import com.itangcent.intellij.logger.Logger
+import com.itangcent.intellij.psi.PsiClassHelper
+import com.itangcent.intellij.psi.TmTypeHelper
+import com.itangcent.intellij.util.FileUtils
+import com.itangcent.intellij.util.ToolUtils
 import java.nio.charset.Charset
+import com.itangcent.intellij.extend.guice.singleton
 
-abstract class ApiExportAction(text: String) : InitAnAction(text) {
+abstract class ApiExportAction(text: String) : KotlinAnAction(text) {
 
     override fun onBuildActionContext(builder: ActionContext.ActionContextBuilder) {
         super.onBuildActionContext(builder)
@@ -40,8 +41,7 @@ abstract class ApiExportAction(text: String) : InitAnAction(text) {
                     .withTitle("Export location")
                     .withDescription("Choose directory to export api to")
                     .withHideIgnored(false)
-            val chooser = FileChooserFactory.getInstance().
-                    createFileChooser(descriptor, project, null)
+            val chooser = FileChooserFactory.getInstance().createFileChooser(descriptor, project, null)
             var toSelect: VirtualFile? = null
             val lastLocation = PropertiesComponent.getInstance().getValue(lastImportedLocation())
             if (lastLocation != null) {

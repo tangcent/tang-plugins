@@ -1,20 +1,23 @@
 package com.itangcent.idea.plugin.api.export
 
 import com.google.inject.Inject
-import com.itangcent.idea.plugin.config.ConfigReader
-import com.itangcent.idea.plugin.config.SimpleBooleanRule
-import com.itangcent.idea.plugin.config.SimpleRuleParse
-import com.itangcent.idea.plugin.config.SimpleStringRule
-import com.itangcent.idea.plugin.logger.Logger
+import com.itangcent.intellij.config.ConfigReader
+import com.itangcent.intellij.config.SimpleBooleanRule
+import com.itangcent.intellij.config.SimpleRuleParse
+import com.itangcent.intellij.config.SimpleStringRule
+import com.itangcent.intellij.logger.Logger
 import java.util.*
 
 class CommonRules {
 
-    @Inject protected val logger: Logger? = null
+    @Inject
+    protected val logger: Logger? = null
 
-    @Inject protected val configReader: ConfigReader? = null
+    @Inject
+    protected val configReader: ConfigReader? = null
 
-    @Inject protected val simpleRuleParse: SimpleRuleParse? = null
+    @Inject
+    protected val simpleRuleParse: SimpleRuleParse? = null
 
     //region moduleRules--------------------------------------------------------
     var moduleRules: ArrayList<SimpleStringRule>? = null

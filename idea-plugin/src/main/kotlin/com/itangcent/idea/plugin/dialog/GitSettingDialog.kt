@@ -3,10 +3,10 @@ package com.itangcent.idea.plugin.dialog
 import com.google.inject.Inject
 import com.intellij.openapi.ui.Messages
 import com.intellij.util.containers.stream
-import com.itangcent.idea.plugin.context.ActionContext
-import com.itangcent.idea.plugin.extend.guice.PostConstruct
-import com.itangcent.idea.plugin.setting.TokenSetting
-import com.itangcent.idea.plugin.setting.SettingManager
+import com.itangcent.intellij.context.ActionContext
+import com.itangcent.intellij.extend.guice.PostConstruct
+import com.itangcent.intellij.setting.SettingManager
+import com.itangcent.intellij.setting.TokenSetting
 import java.awt.event.*
 import javax.swing.*
 import kotlin.streams.toList
@@ -120,13 +120,13 @@ class GitSettingDialog : JDialog() {
 
         if (selectedGitSetting != null && selectedGitSetting!!.host != host) {
             selectedGitSetting!!.privateToken = null
-            settingManager!!.saveGitSetting(selectedGitSetting!!)
+            settingManager!!.saveSetting(selectedGitSetting!!)
         }
 
         val gitSetting = TokenSetting()
         gitSetting.host = host
         gitSetting.privateToken = token
-        settingManager!!.saveGitSetting(gitSetting)
+        settingManager!!.saveSetting(gitSetting)
 
         refreshHost()
     }
@@ -139,7 +139,7 @@ class GitSettingDialog : JDialog() {
         }
 
         selectedGitSetting!!.privateToken = null
-        settingManager!!.saveGitSetting(selectedGitSetting!!)
+        settingManager!!.saveSetting(selectedGitSetting!!)
         refreshHost()
     }
 

@@ -1,8 +1,8 @@
 package com.itangcent.idea.plugin.api.export.postman
 
-import com.itangcent.idea.plugin.config.AutoSearchConfigReader
-import com.itangcent.idea.plugin.extend.guice.PostConstruct
+import com.itangcent.intellij.config.AutoSearchConfigReader
 import java.util.*
+import com.itangcent.intellij.extend.guice.PostConstruct
 
 class PostmanConfigReader : AutoSearchConfigReader() {
 
@@ -12,6 +12,6 @@ class PostmanConfigReader : AutoSearchConfigReader() {
     }
 
     override fun configFileNames(): List<String> {
-        return Arrays.asList(AutoSearchConfigReader.POSTMAN_CONFIG_FILE)
+        return Arrays.asList(".postman.config")
     }
 }

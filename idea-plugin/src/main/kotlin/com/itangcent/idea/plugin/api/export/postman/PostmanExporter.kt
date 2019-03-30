@@ -5,13 +5,13 @@ import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.psi.*
 import com.intellij.psi.util.PsiUtil
+import com.itangcent.common.utils.DateUtils
+import com.itangcent.common.utils.GsonUtils
 import com.itangcent.idea.plugin.api.export.ApiExporter
-import com.itangcent.idea.plugin.fields.KV
-import com.itangcent.idea.plugin.psi.JsonOption
-import com.itangcent.idea.plugin.spring.MultipartFile
-import com.itangcent.idea.plugin.util.ActionUtils
-import com.itangcent.tang.common.utils.DateUtils
-import com.itangcent.tang.common.utils.GsonUtils
+import com.itangcent.intellij.psi.JsonOption
+import com.itangcent.intellij.spring.MultipartFile
+import com.itangcent.intellij.util.ActionUtils
+import com.itangcent.intellij.util.KV
 import org.apache.commons.lang3.RandomUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.commons.lang3.exception.ExceptionUtils
@@ -362,7 +362,7 @@ class PostmanExporter : ApiExporter() {
                         val urlencodedParam: HashMap<String, Any?> = HashMap()
                         urlencodeds.add(buildFormParam(filedName, fieldVal))
                         if (comment != null) {
-                            val fieldComment = comment.getStr(filedName)
+                            val fieldComment = comment.getAs<String?>(filedName)
                             urlencodedParam["description"] = fieldComment
                         }
                     }

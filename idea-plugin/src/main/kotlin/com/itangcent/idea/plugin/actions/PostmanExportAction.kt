@@ -2,20 +2,20 @@ package com.itangcent.idea.plugin.actions
 
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
+import com.itangcent.common.utils.GsonUtils
 import com.itangcent.idea.plugin.api.export.postman.PostmanApiHelper
 import com.itangcent.idea.plugin.api.export.postman.PostmanConfigReader
 import com.itangcent.idea.plugin.api.export.postman.PostmanExporter
-import com.itangcent.idea.plugin.config.ConfigReader
-import com.itangcent.idea.plugin.context.ActionContext
-import com.itangcent.idea.plugin.extend.guice.singleton
-import com.itangcent.idea.plugin.extend.guice.with
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.idea.plugin.psi.ClassRuleConfig
-import com.itangcent.idea.plugin.psi.DefaultClassRuleConfig
-import com.itangcent.idea.plugin.setting.ReadOnlySettingManager
-import com.itangcent.idea.plugin.setting.SettingManager
-import com.itangcent.idea.plugin.util.ToolUtils
-import com.itangcent.tang.common.utils.GsonUtils
+import com.itangcent.intellij.config.ConfigReader
+import com.itangcent.intellij.context.ActionContext
+import com.itangcent.intellij.extend.guice.singleton
+import com.itangcent.intellij.extend.guice.with
+import com.itangcent.intellij.logger.Logger
+import com.itangcent.intellij.psi.ClassRuleConfig
+import com.itangcent.intellij.psi.DefaultClassRuleConfig
+import com.itangcent.intellij.setting.ReadOnlySettingManager
+import com.itangcent.intellij.setting.SettingManager
+import com.itangcent.intellij.util.ToolUtils
 import org.apache.commons.lang3.exception.ExceptionUtils
 
 class PostmanExportAction : ApiExportAction("Export Postman") {

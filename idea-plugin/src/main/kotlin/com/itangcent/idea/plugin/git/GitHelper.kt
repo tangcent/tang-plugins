@@ -1,8 +1,8 @@
 package com.itangcent.idea.plugin.git
 
 import com.google.inject.Inject
-import com.itangcent.idea.plugin.logger.Logger
-import com.itangcent.tang.common.utils.GsonUtils
+import com.itangcent.intellij.logger.Logger
+import com.itangcent.common.utils.GsonUtils
 import org.apache.commons.lang3.exception.ExceptionUtils
 import org.gitlab4j.api.GitLabApi
 import org.gitlab4j.api.models.Commit
