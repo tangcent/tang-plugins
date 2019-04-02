@@ -6,6 +6,7 @@
 
     <description><![CDATA[
       Tm-Plugin<br>
+      Support Export Api To Postman
     ]]></description>
 
     <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->

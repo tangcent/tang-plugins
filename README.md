@@ -4,7 +4,7 @@
 
 - [Download](https://github.com/tangcent/tang-plugins/raw/master/plugin/tang-plugin.jar) the plugin jar and select "Install Plugin From Disk" in IntelliJ's plugin preferences.
 
-- [v1.0.0](https://github.com/tangcent/tang-plugins/raw/master/plugin/tang-plugin.1.0.0.jar)
+- [v1.0.0](https://github.com/tangcent/tang-plugins/raw/master/plugin/tang-plugin.1.0.0.jar) Support Export Api To Postman
 
 ## build
 
