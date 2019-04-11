@@ -1,4 +1,6 @@
-#tang-plugins
+# tang-plugins
+deprecated
+see [easy-api](https://github.com/tangcent/easy-api)
 
 ## Install
 
